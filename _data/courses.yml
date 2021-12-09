@@ -1,21 +1,21 @@
 courses:
-  - item: Tensorflow
-    url: https://google.com/
+  - item: Deep Learning Specialization by Deeplearning.ai
+    url: https://coursera.org/share/e0209bfd5276fd9ef2bc9c9d1f7a5f54
 
-  - item: Pytorch
-    url: https://google.com/
+  - item: Machine Learning by Stanford
+    url: https://www.coursera.org/account/accomplishments/verify/M8UC72A9JYF7
 
-  - item: Scikit-Learn
-    url: https://google.com/
+  - item: Linear Algebra for Machine Learning by Imperial College London
+    url: https://coursera.org/share/3fe89aa181a01914d8298c2130ea030a
 
-  - item: Keras
-    url: https://google.com/
+  - item: Fundamentals of Reinforcement Learning
+    url: https://coursera.org/share/f30e20bd0b8d0e2155ac51e088e9ae85
 
-  - item: D3
-    url: https://google.com/
+  # - item: D3
+  #   url: https://google.com/
 
-  - item: Wordpress
-    url: https://google.com/
+  # - item: Wordpress
+  #   url: https://google.com/
 
-  - item: Timber
-    url: https://google.com/
+  # - item: Timber
+  #   url: https://google.com/
