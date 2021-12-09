@@ -1,5 +1,5 @@
 <section class="section skills">
-    <div class="section__title">Relevant Courses</div>
+    <div class="section__title">Relevant Coursework</div>
     <div class="section__content">
       <!-- <p>I’ve picked up quite a few skills during the course of my three co-ops, and aim to improve these skills everyday. Here are a few of the technologies that I have experience with:</p> -->
       <div class="skillz">
@@ -7,8 +7,7 @@
           <div class="skillz__category__label">Courses</div>
           <ul>
             {% for course in site.data.courses.courses %}
-            <a href="{{courses.url}}" target="_blank"><li class="skillz__category__item">{{course.item}}</li></a>
-          </ul>
+            <li class="skillz__category__item">{{course.item}}</li>
             {% endfor %}
           </ul>
         </div>
