@@ -1,26 +1,20 @@
 # Site settings
-name: Brittany Chiang
-title: Brittany Chiang | Front End Software Engineer
+name: Debojit Nath
+title: Debojit Nath | Data Scientist
 description: Design-minded front-end software engineer focused on building beautiful interfaces and experiences
-url: https://bchiang7.github.io/
+url: https://debojit10.github.io/
 baseurl: ''
 email: brittany.chiang@gmail.com
-cover: https://bchiang7.github.io/img/og.png
-logo: https://bchiang7.github.io/img/emojis/technologist.png
-resume: https://bchiang7.github.io/resume.pdf
+cover: https://debojit10.github.io/img/og.png
+logo: https://debojit10.github.io/img/emojis/technologist.png
+resume: https://debojit10.github.io/resume.pdf
 social:
   - title: email
-    url: mailto:brittany.chiang@gmail.com
-  - title: twitter
-    url: https://twitter.com/bchiang7
-  - title: instagram
-    url: https://instagram.com/bchiang7
-  - title: codepen
-    url: http://codepen.io/bchiang7
+    url: mailto:nathdebojit2000@gmail.com
   - title: github
-    url: https://github.com/bchiang7
+    url: https://github.com/debojit10
   - title: linkedin
-    url: https://www.linkedin.com/in/bchiang7
+    url: https://www.linkedin.com/in/debojit-nath/
 
 # Build settings
 markdown: kramdown
