@@ -1,8 +1,21 @@
 courses:
   - item: Tensorflow
+    url: https://google.com/
+
   - item: Pytorch
+    url: https://google.com/
+
   - item: Scikit-Learn
+    url: https://google.com/
+
   - item: Keras
+    url: https://google.com/
+
   - item: D3
+    url: https://google.com/
+
   - item: Wordpress
+    url: https://google.com/
+
   - item: Timber
+    url: https://google.com/

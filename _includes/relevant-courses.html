@@ -7,7 +7,8 @@
           <div class="skillz__category__label">Courses</div>
           <ul>
             {% for course in site.data.courses.courses %}
-            <li class="skillz__category__item">{{course.item}}</li>
+            <a href="{{courses.url}}" target="_blank"><li class="skillz__category__item">{{course.item}}</li></a>
+          </ul>
             {% endfor %}
           </ul>
         </div>
