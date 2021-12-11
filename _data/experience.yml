@@ -1,12 +1,12 @@
 - company: Empliance Information Services India LLP 
   url: https://empliance.in/
-  time: June 2021 - December 2021
+  time: June - December 2021
   position: Data Science Intern
   description: • Automated Data Mining process from more than 50 sources to create Structured Data for the legal team to use for Compliance Check <br>• Fine Tuned HuggingFace model to classify Indian articles for Adverse Media Check with an accuracy of 95%
 
 - company: Iha Consulting Services Pvt. Ltd
   url: https://www.ihaconsulting.in/
-  time: February 2021 - May 2021
+  time: February - May 2021
   position: Data Science Intern
   description: • Built a Masked Face Recognition model using TensorFlow Object detection API and then converting to TFLite for optimized performance
 
