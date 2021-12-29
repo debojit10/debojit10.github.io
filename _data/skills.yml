@@ -8,9 +8,9 @@ frameworks:
   - item: Pytorch
   - item: Scikit-Learn
   - item: Keras
-  - item: D3
-  - item: Wordpress
-  - item: Timber
+  # - item: D3
+  # - item: Wordpress
+  # - item: Timber
 
 tools:
   - item: Git & Github
