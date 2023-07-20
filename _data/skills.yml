@@ -1,7 +1,7 @@
 languages:
   - item: Python
-  - item: C++
-  - item: C
+  # - item: C++
+  # - item: C
 
 frameworks:
   - item: Tensorflow
