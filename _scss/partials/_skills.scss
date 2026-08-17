@@ -1,15 +1,23 @@
 .skills {
   .skillz {
     display: flex;
-    justify-content: space-between;
-    @include weird-medium {
-      flex-wrap: wrap;
-    }
+    flex-wrap: wrap;
     &__category {
+      width: 33.33%;
+      padding-right: 20px;
+      margin-bottom: 25px;
       @include weird-medium {
-        width: 47%;
-        margin-right: 5px;
-        margin-bottom: 25px;
+        width: 50%;
+        padding-right: 15px;
+      }
+      @include mobile {
+        width: 100%;
+        padding-right: 0;
+      }
+      // Full-width variant, declared last so it wins at every breakpoint
+      &--full {
+        width: 100%;
+        padding-right: 0;
       }
       &__label {
         font-weight: 700;

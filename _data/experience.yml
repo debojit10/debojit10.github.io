@@ -1,12 +1,45 @@
-- company: Empliance Information Services India LLP 
-  url: https://empliance.in/
-  time: June - December 2021
-  position: Data Science Intern
-  description: • Automated Data Mining process from more than 50 sources to create Structured Data for the legal team to use for Compliance Check <br>• Fine Tuned HuggingFace model to classify Indian articles for Adverse Media Check with an accuracy of 95%
+- company: Rivi
+  url: https://rivi.co/
+  time: March 2024 – Present
+  position: ML Engineer
+  highlights:
+    - Drove a 26% gain in response quality with an LLM-as-judge evaluation pipeline that baselined AI services and pinpointed failure modes
+    - Authored and shipped agent prompts through a centralized, versioned prompt system serving 7 tenants, 2 channels, and 3 environments
+    - Generated objective and subjective analytics from 30000+ chats for the admin dashboard using conventional methods and AI, cutting manual analysis effort
+    - Developed end-to-end monitoring of AI agents using Langfuse and Braintrust, enabling per-tenant cost tracking and reducing debugging time
+    - Developed RAG microservice to supplement LLM service with appropriate context, improving answer relevance
+    - Cut inference cost 60% by fine-tuning and self-hosting Mistral-7B and Llama-2-13B to replace GPT-4o in production
 
-- company: Iha Consulting Services Pvt. Ltd
-  url: https://www.ihaconsulting.in/
-  time: February - May 2021
-  position: Data Science Intern
-  description: • Built a Masked Face Recognition model using TensorFlow Object detection API and then converting to TFLite for optimized performance
+- company: 'Rivi (Client: Purgo)'
+  url: https://rivi.co/
+  time: March 2025 – August 2025
+  position: ML Engineer
+  highlights:
+    - Built Graph AI Agent on a Supervisor architecture that autonomously generates solutions for Jira tickets
+    - Implemented micro-service for Reflection Agent which improved the code execution success rate by 33%
+    - Implemented LLM-based Evals to assess generated code quality, surfaced in Langfuse traces to flag low-quality outputs before release
 
+- company: Rivi
+  url: https://rivi.co/
+  time: August 2023 – March 2024
+  position: ML Intern
+  highlights:
+    - Enhanced hotel recommendation by classifying reviews using deep learning methods, improving recommendation relevance
+    - Integrated the LLM agent with the chat module, making interactions more natural and lifting user engagement
+
+- company: Locobuzz
+  url: https://locobuzz.com/
+  time: August 2023 – October 2023
+  position: Data Science Intern
+  highlights:
+    - Predicted stock prices using tweets, achieving 86% accuracy
+    - Cut sales report turnaround from 3 hours to under 10 minutes by cleaning and structuring raw records into analysis-ready tables
+
+- company: Shortlyst AI
+  url: https://shortlyst.ai/
+  time: November 2022 – July 2023
+  position: Data Scientist
+  highlights:
+    - Developed LinkedIn data scraping bots and stored 30M+ profiles in MongoDB
+    - Fine-tuned DistilBERT model to predict industry tags for companies lacking them
+    - Automated stats generation of bot performance for monitoring via Slack, saving hours of manual reporting

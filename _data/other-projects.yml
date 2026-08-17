@@ -1,3 +1,23 @@
+- name: Toxic Comment Classification
+  url: https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge
+  description: Trained a multi-label classifier for the Kaggle Toxic Comment Classification Challenge, scoring 0.9845 on the public leaderboard.
+  used:
+    - thing: Python
+    - thing: NLP
+    - thing: Multi-label Classification
+    - thing: Kaggle
+
+- name: Fashion Apparel Classification
+  description: Trained a Vision Transformer on an imbalanced apparel dataset, applying re-sampling to counter class imbalance and lifting accuracy from 66% to 69%.
+  used:
+    - thing: Python
+    - thing: PyTorch
+    - thing: Vision Transformer
+
+# ---------------------------------------------------------------------------
+# Reference examples from the original template by Brittany Chiang (bchiang7)
+# ---------------------------------------------------------------------------
+
 # - name: Surf Videos
 #   url: https://github.com/bchiang7/Surf-Videos
 #   code: https://github.com/bchiang7/Surf-Videos

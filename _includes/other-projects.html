@@ -1,10 +1,14 @@
-<!-- <section class="section other-projects">
-  <div class="section__title">Other Projects</div>
+<section class="section other-projects">
+  <div class="section__title">Projects</div>
   <div class="section__content">
     {% for project in site.data.other-projects %}
     <div class="project">
       <div class="project__name">
+        {% if project.url %}
         <a href="{{project.url}}" target="_blank" class="arrow-link">{{project.name}}</a>
+        {% else %}
+        <strong>{{project.name}}</strong>
+        {% endif %}
       </div>
       <p>{{project.description}}</p>
       <div class="project__used">
@@ -15,4 +19,4 @@
     </div>
     {% endfor %}
   </div>
-</section> -->
+</section>

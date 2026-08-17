@@ -11,7 +11,11 @@
           </div>
           <div class="job__time">{{job.time}}</div>
         </div>
-        <div class="job__position">{{job.description}}</div>
+        <ul class="job__highlights">
+          {% for highlight in job.highlights %}
+          <li>{{highlight}}</li>
+          {% endfor %}
+        </ul>
       </div>
       {% endfor %}
     </div>

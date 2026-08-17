@@ -21,6 +21,15 @@
         font-size: 0.8rem;
       }
     }
+    // Global `ul` reset strips markers and padding, so restore both here
+    &__highlights {
+      margin-top: 5px;
+      padding-left: 18px;
+      li {
+        list-style: disc;
+        margin: 4px 0;
+      }
+    }
   }
   .arrow-link {
     font-size: 1.25rem;
