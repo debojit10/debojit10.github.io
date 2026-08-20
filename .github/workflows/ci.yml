@@ -1,9 +1,10 @@
 # Builds the site with the same toolchain GitHub Pages uses, then verifies every
 # internal link, image, script and anchor resolves. A broken Liquid tag or a dead
-# anchor fails here instead of on the live site.
+# anchor fails here instead of shipping.
 #
-# External links are checked on a schedule instead of on every push: a push
-# should not fail because linkedin.com rate-limited the runner.
+# Note this workflow does NOT gate the deploy: GitHub Pages builds and publishes
+# this user site from master on its own. A red run here means "something needs
+# looking at", never "the site is down".
 name: build
 
 on:
@@ -31,17 +32,31 @@ jobs:
         env:
           JEKYLL_ENV: production
 
-      # --swap-urls takes comma-separated `regex:replacement` pairs, so the colon
-      # inside "https://" has to be escaped or html-proofer compiles the wrong
-      # regex and every run fails. --enforce-https is ON by default in
-      # html-proofer 5 and one outbound education link is http-only (that
-      # institution's TLS certificate does not validate), so it is turned off.
+      # Two flags here are easy to get wrong, so both are spelled out.
+      #
+      # --swap-urls takes comma-separated `regex:replacement` pairs, split on the
+      # first colon NOT preceded by a backslash. The colon inside "https://" must
+      # therefore be escaped as `\:`, or html-proofer compiles `^https` as the
+      # pattern and mangles every absolute URL on the page. The swap exists so the
+      # canonical and og: URLs get checked against the local build rather than
+      # being skipped as external.
+      #
+      # --no-enforce-https, NOT `--enforce-https false`. The CLI declares this as
+      # `--[no-]enforce-https` with no argument placeholder, so the value form
+      # sets it TRUE — the opposite of the intent — and leaves the bare word
+      # `false` behind as a second search path. It has to be off because one
+      # education link is http-only (that institution serves no valid
+      # certificate), and check_schemes runs before the external/internal split,
+      # so --disable-external cannot skip it.
+      #
+      # Turning that check off would let a NEW cleartext URL through, so the
+      # guard in the next step catches those instead.
       - name: Check internal links, images, scripts and anchors
         run: |
           gem install html-proofer --no-document
           htmlproofer ./_site \
             --disable-external \
-            --enforce-https false \
+            --no-enforce-https \
             --checks Links,Images,Scripts,OpenGraph \
             --swap-urls '^https\://debojit10\.github\.io:'
 
@@ -49,19 +64,35 @@ jobs:
       # and the point of this step is to keep it done — WITHOUT writing that
       # author's name into the repo, which would make this file the last
       # surviving copy of the very thing it exists to remove. So it asserts
-      # positive facts instead: the footer names the right person, and nothing
-      # in the page loads from anywhere but this origin.
+      # positive facts instead.
       - name: Assert the site's own identity and origin
         run: |
-          set -e
-          grep -q 'Debojit Nath' _site/index.html             || { echo "::error::index.html no longer names the site owner"; exit 1; }
-          if grep -ohE '(src|href)="https?://[^"]*"' _site/index.html                | grep -vE 'debojit10\.github\.io|rivi\.co|locobuzz\.com|shortlyst\.ai|study\.iitm\.ac\.in|tiitcollege\.org|coursera\.org|kaggle\.com|linkedin\.com|github\.com' ; then
-            echo "::error::an unexpected third-party URL appeared in the page"
-            exit 1
-          fi
-          for pat in 'assets/fonts/' 'assets/css/main.css' 'assets/js/main.js'; do
-            grep -q "$pat" _site/index.html || { echo "::error::missing $pat"; exit 1; }
+          set -euo pipefail
+
+          fail() { echo "::error::$1"; exit 1; }
+
+          grep -q 'Debojit Nath' _site/index.html \
+            || fail "index.html no longer names the site owner"
+
+          for asset in 'assets/fonts/' 'assets/css/main.css' 'assets/js/main.js'; do
+            grep -q "$asset" _site/index.html || fail "index.html stopped referencing $asset"
           done
+
+          # Every off-origin URL in the built pages must be one we put there.
+          # This is what keeps a CDN, a font host or a tracker from appearing.
+          KNOWN='debojit10\.github\.io|rivi\.co|locobuzz\.com|shortlyst\.ai'
+          KNOWN="$KNOWN"'|study\.iitm\.ac\.in|tiitcollege\.org|coursera\.org'
+          KNOWN="$KNOWN"'|kaggle\.com|linkedin\.com|github\.com|schema\.org|www\.w3\.org'
+          if grep -ohE '(src|href)="https?://[^"]*"' _site/*.html | grep -vE "$KNOWN"; then
+            fail "an unexpected third-party URL appeared in the page"
+          fi
+
+          # html-proofer's HTTPS check is off above, so cleartext is caught here.
+          # tiitcollege.org is the one documented exception.
+          if grep -ohE '(src|href)="http://[^"]*"' _site/*.html | grep -v 'tiitcollege\.org'; then
+            fail "a new cleartext http:// URL appeared in the page"
+          fi
+
           echo "identity and origin clean"
 
       - uses: actions/upload-artifact@v4
