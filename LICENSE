@@ -1,0 +1,89 @@
+MIT License
+
+Copyright (c) 2026 Debojit Nath
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+================================================================================
+SCOPE
+================================================================================
+
+The MIT grant above covers the site's own code: the Liquid templates, the
+stylesheet, the JavaScript, the build configuration and tools/og.py. It does
+NOT cover the following, which are either third-party works under their own
+terms or personal information:
+
+--------------------------------------------------------------------------------
+FONTS — SIL Open Font License 1.1
+--------------------------------------------------------------------------------
+Newsreader
+  Copyright 2020 The Newsreader Project Authors
+  https://github.com/productiontype/Newsreader
+  Full licence: assets/fonts/OFL-Newsreader.txt
+
+IBM Plex Mono
+  Copyright (c) 2017 IBM Corp., with Reserved Font Name "Plex"
+  https://github.com/IBM/plex
+  Full licence: assets/fonts/OFL-IBMPlexMono.txt
+
+The files in assets/fonts/ are subsetted and axis-instanced derivatives of the
+originals, which the OFL permits. See assets/fonts/README.md for exactly how
+they were produced.
+
+--------------------------------------------------------------------------------
+ICONS
+--------------------------------------------------------------------------------
+The GitHub mark in _includes/icons.html is from GitHub Octicons, MIT License:
+
+  Copyright (c) GitHub, Inc.
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+
+The LinkedIn and Kaggle marks are from Simple Icons, released under CC0 1.0
+(public domain dedication): https://github.com/simple-icons/simple-icons
+Both remain the trademarks of their respective owners and are used here only to
+label links to the account holder's own profiles.
+
+Every other glyph in _includes/icons.html is drawn for this project and falls
+under the MIT grant above.
+
+--------------------------------------------------------------------------------
+PERSONAL CONTENT — not licensed for reuse
+--------------------------------------------------------------------------------
+resume.pdf, the biographical content in _data/*.yml, the prose in
+_includes/sections/about.html, and the identity fields in _config.yml are
+personal information. They are published so people can read them, not so they
+can be reused.

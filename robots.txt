@@ -1,3 +1,8 @@
+---
+layout: null
+permalink: /robots.txt
+---
 User-agent: *
-Disallow:
-Sitemap: https://bchiang7.github.io/sitemap.xml
+Allow: /
+
+Sitemap: {{ site.url }}{{ site.baseurl }}/sitemap.xml

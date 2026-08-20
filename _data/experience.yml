@@ -1,45 +1,100 @@
-- company: Rivi
-  url: https://rivi.co/
-  time: March 2024 – Present
-  position: ML Engineer
-  highlights:
-    - Drove a 26% gain in response quality with an LLM-as-judge evaluation pipeline that baselined AI services and pinpointed failure modes
-    - Authored and shipped agent prompts through a centralized, versioned prompt system serving 7 tenants, 2 channels, and 3 environments
-    - Generated objective and subjective analytics from 30000+ chats for the admin dashboard using conventional methods and AI, cutting manual analysis effort
-    - Developed end-to-end monitoring of AI agents using Langfuse and Braintrust, enabling per-tenant cost tracking and reducing debugging time
-    - Developed RAG microservice to supplement LLM service with appropriate context, improving answer relevance
-    - Cut inference cost 60% by fine-tuning and self-hosting Mistral-7B and Llama-2-13B to replace GPT-4o in production
-
-- company: 'Rivi (Client: Purgo)'
-  url: https://rivi.co/
-  time: March 2025 – August 2025
-  position: ML Engineer
-  highlights:
-    - Built Graph AI Agent on a Supervisor architecture that autonomously generates solutions for Jira tickets
-    - Implemented micro-service for Reflection Agent which improved the code execution success rate by 33%
-    - Implemented LLM-based Evals to assess generated code quality, surfaced in Langfuse traces to flag low-quality outputs before release
+# Work history, newest first. Months are abbreviated because they render in a
+# 176-224px mono rail; the full forms wrap and leave an orphaned year.
+# Rendered by _includes/sections/experience.html
+# Every `highlight` should lead with the outcome, not the activity.
 
 - company: Rivi
   url: https://rivi.co/
-  time: August 2023 – March 2024
-  position: ML Intern
+  role: ML Engineer
+  start: Mar 2024
+  end: Present
+  current: true
+  summary: >-
+    Own the LLM layer behind Rivi's AI products — agent prompts, retrieval,
+    evaluation and observability — across a multi-tenant production deployment.
   highlights:
-    - Enhanced hotel recommendation by classifying reviews using deep learning methods, improving recommendation relevance
+    - Drove a <strong>26% gain in response quality</strong> with an LLM-as-judge evaluation pipeline that baselined our AI services and pinpointed their failure modes
+    - Authored and shipped agent prompts through a centralized, versioned prompt system serving <strong>7 tenants, 2 channels and 3 environments</strong>
+    - Cut inference cost <strong>60%</strong> by fine-tuning and self-hosting Mistral-7B and Llama-2-13B to replace GPT-4o in production
+    - Generated objective and subjective analytics from <strong>30,000+ chats</strong> for the admin dashboard, cutting manual analysis effort
+    - Built end-to-end monitoring of AI agents on Langfuse and Braintrust, enabling per-tenant cost tracking and cutting debugging time
+    - Developed a RAG microservice that supplies the LLM service with grounded context, improving answer relevance
+  stack:
+    - LangGraph
+    - RAG
+    - Langfuse
+    - Braintrust
+    - vLLM
+    - LoRA
+
+- company: Rivi
+  client: Purgo
+  url: https://rivi.co/
+  role: ML Engineer
+  start: Mar 2025
+  end: Aug 2025
+  summary: >-
+    Client engagement building an autonomous coding agent that resolves Jira
+    tickets end to end.
+  highlights:
+    - Built a Graph AI Agent on a supervisor architecture that autonomously generates solutions for Jira tickets
+    - Shipped a Reflection Agent microservice that lifted code-execution success rate by <strong>33%</strong>
+    - Implemented LLM-based evals for generated code quality, surfaced in Langfuse traces to flag low-quality output before release
+  stack:
+    - LangGraph
+    - Supervisor Agents
+    - Langfuse
+    - Jira API
+
+- company: Rivi
+  url: https://rivi.co/
+  role: ML Intern
+  start: Aug 2023
+  end: Mar 2024
+  # THIN-ROLE RULE: two unquantified highlights would read as filler beside the
+  # current role's six. The summary already says what they say.
+  compact: true
+  summary: >-
+    First LLM work at Rivi: bringing deep learning and conversational agents
+    into the core travel product.
+  highlights:
+    - Improved hotel recommendation relevance by classifying guest reviews with deep learning models
     - Integrated the LLM agent with the chat module, making interactions more natural and lifting user engagement
+  stack:
+    - PyTorch
+    - Transformers
+    - Recommenders
 
 - company: Locobuzz
   url: https://locobuzz.com/
-  time: August 2023 – October 2023
-  position: Data Science Intern
+  role: Data Science Intern
+  start: Aug 2023
+  end: Oct 2023
+  summary: >-
+    Social-listening analytics — turning noisy public text into signals the
+    business could act on.
   highlights:
-    - Predicted stock prices using tweets, achieving 86% accuracy
-    - Cut sales report turnaround from 3 hours to under 10 minutes by cleaning and structuring raw records into analysis-ready tables
+    - Predicted stock price movement from tweets at <strong>86% accuracy</strong>
+    - Cut sales-report turnaround from <strong>3 hours to under 10 minutes</strong> by cleaning and structuring raw records into analysis-ready tables
+  stack:
+    - Python
+    - NLP
+    - pandas
+    - SQL
 
 - company: Shortlyst AI
   url: https://shortlyst.ai/
-  time: November 2022 – July 2023
-  position: Data Scientist
+  role: Data Scientist
+  start: Nov 2022
+  end: Jul 2023
+  summary: >-
+    Large-scale people-data pipelines and the models that enriched them.
   highlights:
-    - Developed LinkedIn data scraping bots and stored 30M+ profiles in MongoDB
-    - Fine-tuned DistilBERT model to predict industry tags for companies lacking them
-    - Automated stats generation of bot performance for monitoring via Slack, saving hours of manual reporting
+    - Built LinkedIn scraping bots and stored <strong>30M+ profiles</strong> in MongoDB
+    - Fine-tuned DistilBERT to infer industry tags for companies missing them
+    - Automated bot-performance reporting into Slack, removing hours of manual monitoring
+  stack:
+    - DistilBERT
+    - MongoDB
+    - Selenium
+    - Slack API

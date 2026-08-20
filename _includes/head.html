@@ -1,30 +1,126 @@
-<meta charset="UTF-8">
-<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>{{ site.title }}</title>
-<link rel="icon" type="image/png" href="{{site.logo}}" hreflang="en-us">
-<meta property="og:title" content="{{site.title}}" />
-<meta property="og:description" content="{{site.description}}" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="{{site.url}}" />
-<meta property="og:site_name" content="{{site.name}}" />
-<meta property="og:image" content="{{site.cover}}" />
-<meta property="og:image:width" content="1280" />
-<meta property="og:image:height" content="800" />
-<meta property="og:image:type" content="image/png" />
-<meta property="og:locale" content="en_US">
-<meta name="description" content="{{site.description}}">
-<meta name="keywords" content="design, development, web, bchiang7, brittany, chiang, javascript, northeastern">
-<meta name="google-site-verification" content="DCl7VAf9tcz6eD9gb67NfkNnJ1PKRNcg8qQiwpbx9Lk" />
-<meta itemprop="name" content="{{site.title}}">
-<meta itemprop="description" content="{{site.description}}">
-<meta itemprop="image" content="{{site.cover}}">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:url" content="{{site.url}}">
-<meta name="twitter:site" content="@bchiang7">
-<meta name="twitter:creator" content="@bchiang7">
-<meta name="twitter:title" content="{{site.title}}">
-<meta name="twitter:description" content="{{site.description}}">
-<meta name="twitter:image:src" content="{{site.cover}}">
-<link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet">
-<link rel="stylesheet" href="{{ site.baseurl }}/css/main.css" hreflang="en-us">
+{%- comment -%}
+  Document head. Everything jekyll-seo-tag would emit is written out by hand so
+  a local build and the GitHub Pages build are byte-identical, with no plugin
+  in between. Values come from _config.yml — nothing is hard-coded here.
+{%- endcomment -%}
+
+{%- assign page_title = page.title | default: site.title -%}
+{%- assign page_desc  = page.description | default: site.description | strip_newlines | strip -%}
+{%- assign base       = site.url | append: site.baseurl -%}
+{%- assign og_image   = base | append: site.image -%}
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{%- comment -%}
+  Theme bootstrap. Must run BEFORE the stylesheet so the resolved theme is on
+  <html> at first paint and there is no flash of the wrong colours.
+
+  Two attributes, two jobs:
+    data-theme      the RESOLVED theme — drives the colour tokens
+    data-theme-mode the USER'S CHOICE — drives which radio is checked
+  Splitting them is what makes a genuine three-state control possible.
+
+  The `js` class arms the reveal animation's hidden start state, so a visitor
+  with JavaScript blocked never gets content that stays invisible.
+{%- endcomment -%}
+<script>
+  (function () {
+    var d = document.documentElement;
+    d.classList.add('js');
+    try {
+      var m = localStorage.getItem('theme'); // 'light' | 'dark' | null (follow system)
+      d.dataset.themeMode = m || 'system';
+      d.dataset.theme = m || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    } catch (e) {
+      // Storage is blocked (Safari private mode). Fall back to the OS, and if
+      // even matchMedia is unavailable leave data-theme UNSET so the
+      // prefers-color-scheme block in the stylesheet still governs. Stamping
+      // "light" here would have excluded that block and forced light on a dark
+      // OS, which is the one outcome worse than doing nothing.
+      d.dataset.themeMode = 'system';
+      try {
+        if (matchMedia('(prefers-color-scheme: dark)').matches) d.dataset.theme = 'dark';
+      } catch (e2) { /* leave it to the stylesheet */ }
+    }
+  })();
+</script>
+
+<title>{{ page_title }}</title>
+<meta name="description" content="{{ page_desc | escape }}">
+<link rel="canonical" href="{{ base }}{{ page.url | default: '/' }}">
+<meta name="author" content="{{ site.name }}">
+{%- comment -%}
+  Two media-scoped tags for the no-JS and pre-JS case, plus a third that
+  main.js retargets when the visitor picks a theme explicitly — otherwise the
+  browser chrome stays on the OS theme and fights the page.
+{%- endcomment -%}
+<meta name="theme-color" content="#FBF8F3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14120F" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" id="theme-color-override" content="">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{ site.name }}">
+<meta property="og:title" content="{{ page_title }}">
+<meta property="og:description" content="{{ page_desc | escape }}">
+<meta property="og:url" content="{{ base }}{{ page.url | default: '/' }}">
+<meta property="og:locale" content="{{ site.locale | default: 'en_US' }}">
+<meta property="og:image" content="{{ og_image }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:alt" content="{{ site.image_alt | strip_newlines | strip | escape }}">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ page_title }}">
+<meta name="twitter:description" content="{{ page_desc | escape }}">
+<meta name="twitter:image" content="{{ og_image }}">
+<meta name="twitter:image:alt" content="{{ site.image_alt | strip_newlines | strip | escape }}">
+
+<link rel="icon" href="{{ '/assets/favicon.svg' | relative_url }}" type="image/svg+xml">
+<link rel="icon" href="{{ '/assets/favicon-32.png' | relative_url }}" sizes="32x32">
+
+{%- comment -%}
+  Fonts are self-hosted (see assets/fonts/README.md) so there is no third-party
+  origin and no extra DNS + TLS handshake. Only the two faces that render above
+  the fold are preloaded — the masthead serif and the 500-weight mono that sets
+  the running head, eyebrow and every ledger label.
+{%- endcomment -%}
+<link rel="preload" href="{{ '/assets/fonts/newsreader-roman-var.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ '/assets/fonts/plex-mono-500.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": {{ site.name | jsonify }},
+  "url": {{ base | append: '/' | jsonify }},
+  "image": {{ og_image | jsonify }},
+  "email": {{ site.email | jsonify }},
+  "jobTitle": {{ site.role | jsonify }},
+  "description": {{ page_desc | jsonify }},
+  "address": { "@type": "PostalAddress", "addressCountry": {{ site.location | jsonify }} },
+  "knowsAbout": [
+    "Large Language Models", "LLM Agents", "Retrieval-Augmented Generation",
+    "LLM Evaluation", "LLMOps", "Machine Learning Engineering",
+    "Natural Language Processing", "Model Fine-tuning"
+  ],
+  "sameAs": [
+    {%- assign sep = '' -%}
+    {%- for s in site.social -%}
+      {%- unless s.icon == 'mail' -%}{{ sep }}{{ s.url | jsonify }}{%- assign sep = ',' -%}{%- endunless -%}
+    {%- endfor -%}
+  ],
+  "alumniOf": [
+    {%- for s in site.data.education %}
+    { "@type": "CollegeOrUniversity", "name": {{ s.school | jsonify }}, "url": {{ s.url | jsonify }} }{% unless forloop.last %},{% endunless %}
+    {%- endfor %}
+  ],
+  "worksFor": {
+    "@type": "Organization",
+    "name": {{ site.data.experience[0].company | jsonify }},
+    "url": {{ site.data.experience[0].url | jsonify }}
+  }
+}
+</script>

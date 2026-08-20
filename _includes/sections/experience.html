@@ -1,0 +1,91 @@
+{%- comment -%}
+  02 — Experience. A ledger of roles, and an honest org chart.
+
+  The three Rivi entries are grouped under one employer band rather than
+  rendered as three consecutive rows. Listing "Rivi" three times in a five-row
+  list reads as a rendering bug in the one section where a reader decides
+  whether a career is coherent. Jekyll's group_by preserves first-appearance
+  order and the Rivi entries are already adjacent, so reverse chronology
+  survives: Rivi → Locobuzz → Shortlyst AI.
+
+  An entry carrying `client:` is nested inside the role it overlapped rather
+  than shown as a sibling — the Purgo engagement (Mar–Aug 2025) falls within
+  the current Rivi tenure, so that is the truth.
+
+  THIN-ROLE RULE: `compact: true` in the data renders the summary alone. It is
+  an explicit flag, not a silent template heuristic, so a future YAML edit
+  cannot make content disappear without someone seeing why.
+{%- endcomment -%}
+<section class="section reveal" id="experience" aria-labelledby="experience-title">
+  <div class="section__head">
+    <span class="section__numeral" aria-hidden="true">02</span>
+    <h2 class="section__title" id="experience-title">Experience</h2>
+  </div>
+
+  {%- assign employers = site.data.experience | group_by: 'company' -%}
+  {%- for co in employers -%}
+    {%- assign first = co.items | first -%}
+    {%- assign last = co.items | last -%}
+  <article class="employer">
+    {%- comment -%}
+      Only worth printing when it spans more than one role. For a single-role
+      employer it would just repeat the role's own dates one line above them.
+    {%- endcomment -%}
+    {%- if co.items.size > 1 %}
+    <p class="employer__span meta" aria-hidden="true">{{ last.start }} — {{ first.end }}</p>
+    {%- endif %}
+    <h3 class="employer__name">
+      <a href="{{ first.url }}" rel="noopener" target="_blank">{{ co.name }}</a>
+    </h3>
+
+    {%- for role in co.items -%}
+    <div class="role{% if role.client %} role--client{% endif %}">
+      <p class="role__dates meta">
+        <span>{{ role.start }} — {{ role.end }}</span>
+        {%- if role.current %}<span class="role__active">Active</span>{% endif %}
+      </p>
+
+      <div class="role__body">
+        {%- if role.client %}
+        <p class="role__client meta">Client engagement · {{ role.client }}</p>
+        {%- endif %}
+        <h4 class="role__title">{{ role.role }}</h4>
+        {%- if role.summary %}
+        <p class="role__summary">{{ role.summary | strip_newlines | strip }}</p>
+        {%- endif %}
+
+        {%- unless role.compact %}
+        <ul class="role__highlights">
+          {%- for h in role.highlights %}
+          {%- comment -%}
+            The class is added to the existing <strong> rather than replacing
+            it: the red pen is a visual treatment, and the emphasis is real
+            semantics a screen reader should still convey.
+          {%- endcomment -%}
+          <li>{{ h | replace: '<strong>', '<strong class="fig">' }}</li>
+          {%- endfor %}
+        </ul>
+        {%- endunless %}
+      </div>
+
+      {%- comment -%}
+        A <p>, not an <aside>: five roles would otherwise put five identically
+        named `complementary` landmarks into the landmark list, which is worse
+        than no landmark at all.
+      {%- endcomment -%}
+      {%- if role.stack %}
+      <p class="role__stack note meta">
+        <span class="vh">Stack: </span>
+        {%- for t in role.stack %}<span>{{ t }}</span>{% endfor %}
+      </p>
+      {%- endif %}
+    </div>
+    {%- endfor %}
+  </article>
+  {%- endfor %}
+
+  <p class="section__foot">
+    <a class="arrow-link" href="{{ site.resume | relative_url }}" download="{{ site.resume_filename }}"
+      >Full résumé<svg class="icon" aria-hidden="true"><use href="#i-download"/></svg></a>
+  </p>
+</section>

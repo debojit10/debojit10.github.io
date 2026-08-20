@@ -1,59 +1,58 @@
-- category: Languages
-  items:
-    - item: Python
-    - item: SQL
-    - item: C++
-    - item: Bash
+# Technical skills by category. Rendered by _includes/sections/skills.html
+# Plain text only — the template HTML-escapes these.
 
-- category: GenAI / LLM
+- category: GenAI & LLM
   items:
-    - item: LangChain
-    - item: LangGraph
-    - item: RAG
-    - item: Vector Databases
-    - item: Agentic Workflows
-    - item: Multi-Agent Systems
-    - item: Prompt Engineering
-    - item: Tool / Function Calling
-    - item: LLM-as-Judge Evals
-    - item: LoRA / PEFT Fine-tuning
-    - item: vLLM
-    - item: OpenAI &amp; Anthropic APIs
+    - LangChain
+    - LangGraph
+    - RAG
+    - Vector Databases
+    - Agentic Workflows
+    - Multi-Agent Systems
+    - Prompt Engineering
+    - Tool / Function Calling
+    - LLM-as-Judge Evals
+    - LoRA / PEFT Fine-tuning
+    - vLLM
+    - OpenAI & Anthropic APIs
 
 - category: LLMOps
   items:
-    - item: Langfuse
-    - item: Braintrust
-    - item: Prompt Versioning &amp; Rollout
-    - item: Tracing
-    - item: Token &amp; Cost Tracking
+    - Langfuse
+    - Braintrust
+    - Prompt Versioning & Rollout
+    - Tracing
+    - Token & Cost Tracking
 
-- category: ML &amp; NLP
+- category: ML & NLP
   items:
-    - item: PyTorch
-    - item: TensorFlow
-    - item: Scikit-learn
-    - item: HuggingFace Transformers
-    - item: Vision Transformers
-    - item: Recommender Systems
-    - item: Sentiment Analysis
-    - item: OpenCV
+    - PyTorch
+    - TensorFlow
+    - Scikit-learn
+    - HuggingFace Transformers
+    - Vision Transformers
+    - Recommender Systems
+    - Sentiment Analysis
+    - OpenCV
 
-- category: Data &amp; Infra
+- category: Data & Infra
   items:
-    - item: pandas
-    - item: NumPy
-    - item: PostgreSQL
-    - item: MongoDB
-    - item: Redis
-    - item: FastAPI
-    - item: Flask
-    - item: REST APIs
-    - item: Microservices
-    - item: Docker
-    - item: Kubernetes
-    - item: AWS
-    - item: Git
-    - item: CI/CD
-    - item: Selenium
-    - item: BeautifulSoup
+    - pandas
+    - NumPy
+    - PostgreSQL
+    - MongoDB
+    - Redis
+    - FastAPI
+    - Flask
+    - REST APIs
+    - Microservices
+    - Docker
+    - Kubernetes
+    - AWS
+    - Git
+    - CI/CD
+    - Selenium
+    - BeautifulSoup
+
+- category: Languages
+  items: [Python, SQL, C++, Bash]

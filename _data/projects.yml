@@ -1,0 +1,51 @@
+# Selected personal / competition work. Rendered by _includes/sections/projects.html
+# `metric` is the single number that makes the project worth reading about.
+
+- name: Toxic Comment Classification
+  url: https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge
+  year: '2023'
+  # READOUT RULE: no readout without two real values and a `title` naming them.
+  # A decorative bar on an unmeasured project would be fabricated telemetry —
+  # the worst possible failure for a page about keeping systems honest.
+  readout:
+    kind: scale
+    value: 0.9845
+    max: 1
+    figure: '0.9845'
+    caption: Public leaderboard · ROC-AUC
+    title: Public leaderboard ROC-AUC of 0.9845 on a scale from 0 to 1.
+  description: >-
+    Multi-label classifier for the Jigsaw Toxic Comment Classification
+    Challenge, separating six overlapping categories of abusive language from
+    raw Wikipedia comment text.
+  stack:
+    - Python
+    - NLP
+    - Multi-label Classification
+    - Kaggle
+
+- name: Fashion Apparel Classification
+  year: '2023'
+  readout:
+    kind: delta
+    before: 66
+    after: 69
+    max: 100
+    delta: '+3 pts'
+    # `from`/`to`/`unit` rather than a baked "66 → 69%" string: none of the four
+    # self-hosted faces carry U+2192, so a literal arrow would render in a
+    # fallback font on the page's most prominent figure. The template composes
+    # it with the hand-drawn SVG arrow from the icon sprite instead.
+    from: '66'
+    to: '69'
+    unit: '%'
+    caption: Top-1 accuracy · class-rebalanced
+    title: Top-1 accuracy improved from 66 percent to 69 percent, a gain of 3 points.
+  description: >-
+    Vision Transformer trained on a heavily imbalanced apparel dataset, using
+    re-sampling to counter the long tail and recover accuracy the majority
+    classes were hiding.
+  stack:
+    - Python
+    - PyTorch
+    - Vision Transformer

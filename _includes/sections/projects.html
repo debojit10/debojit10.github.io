@@ -1,0 +1,66 @@
+{%- comment -%}
+  03 — Projects. Two specimens, hairline-gap grid, no screenshots.
+
+  There is no imagery on this page and none will be invented, so THE RESULT IS
+  THE IMAGE: each project opens with its outcome as a large serif numeral and a
+  small hand-drawn readout beneath it. That is how a report handles a result it
+  has no photograph of, and it is more honest than mocking up a UI that does
+  not exist.
+{%- endcomment -%}
+<section class="section reveal" id="projects" aria-labelledby="projects-title">
+  <div class="section__head">
+    <span class="section__numeral" aria-hidden="true">03</span>
+    <h2 class="section__title" id="projects-title">Projects</h2>
+  </div>
+
+  <div class="projects">
+    {%- for p in site.data.projects %}
+    <article class="project">
+      <p class="project__index meta" aria-hidden="true">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</p>
+
+      {%- comment -%}
+        The heading comes FIRST in the DOM so heading navigation attributes the
+        result to its own project rather than to the one above it. CSS `order`
+        puts the result above it visually — the result is the image here, and
+        nothing in the block is focusable except the title link, so there is no
+        focus-order mismatch to create.
+      {%- endcomment -%}
+      <h3 class="project__name">
+        {%- if p.url -%}
+        <a href="{{ p.url }}" rel="noopener" target="_blank">{{ p.name }}<svg class="icon" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></a>
+        {%- else -%}
+        {{ p.name }}
+        {%- endif -%}
+      </h3>
+
+      {%- if p.readout %}
+      <div class="project__result">
+        <p class="fig-lg">
+          {%- if p.readout.from -%}
+          <span class="fig-lg__value">{{ p.readout.from }}</span>
+          <svg class="fig-lg__arrow" viewBox="0 0 24 12" aria-hidden="true" focusable="false"
+            ><path d="M0 6h20M15 1.2 20.4 6 15 10.8" fill="none" stroke="currentColor" stroke-width="1.2"
+              stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>
+          <span class="fig-lg__value">{{ p.readout.to }}</span>
+          {%- if p.readout.unit %}<span class="fig-lg__unit">{{ p.readout.unit }}</span>{% endif %}
+          <span class="vh">, up from {{ p.readout.from }}{{ p.readout.unit }} to {{ p.readout.to }}{{ p.readout.unit }}</span>
+          {%- else -%}
+          <span class="fig-lg__value">{{ p.readout.figure }}</span>
+          {%- endif -%}
+        </p>
+        {%- include readout.html readout=p.readout -%}
+        <p class="project__caption meta">{{ p.readout.caption }}</p>
+      </div>
+      {%- endif %}
+
+      <p class="project__desc">{{ p.description | strip_newlines | strip }}</p>
+
+      {%- if p.stack %}
+      <p class="project__stack meta">
+        {%- for t in p.stack %}<span>{{ t }}</span>{% endfor %}
+      </p>
+      {%- endif %}
+    </article>
+    {%- endfor %}
+  </div>
+</section>

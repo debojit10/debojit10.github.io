@@ -1,0 +1,72 @@
+# Builds the site with the same toolchain GitHub Pages uses, then verifies every
+# internal link, image, script and anchor resolves. A broken Liquid tag or a dead
+# anchor fails here instead of on the live site.
+#
+# External links are checked on a schedule instead of on every push: a push
+# should not fail because linkedin.com rate-limited the runner.
+name: build
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+
+      - name: Build with the GitHub Pages toolchain
+        run: bundle exec jekyll build --trace
+        env:
+          JEKYLL_ENV: production
+
+      # --swap-urls takes comma-separated `regex:replacement` pairs, so the colon
+      # inside "https://" has to be escaped or html-proofer compiles the wrong
+      # regex and every run fails. --enforce-https is ON by default in
+      # html-proofer 5 and one outbound education link is http-only (that
+      # institution's TLS certificate does not validate), so it is turned off.
+      - name: Check internal links, images, scripts and anchors
+        run: |
+          gem install html-proofer --no-document
+          htmlproofer ./_site \
+            --disable-external \
+            --enforce-https false \
+            --checks Links,Images,Scripts,OpenGraph \
+            --swap-urls '^https\://debojit10\.github\.io:'
+
+      # This site began as a fork of someone else's template. The scrub is done,
+      # and the point of this step is to keep it done — WITHOUT writing that
+      # author's name into the repo, which would make this file the last
+      # surviving copy of the very thing it exists to remove. So it asserts
+      # positive facts instead: the footer names the right person, and nothing
+      # in the page loads from anywhere but this origin.
+      - name: Assert the site's own identity and origin
+        run: |
+          set -e
+          grep -q 'Debojit Nath' _site/index.html             || { echo "::error::index.html no longer names the site owner"; exit 1; }
+          if grep -ohE '(src|href)="https?://[^"]*"' _site/index.html                | grep -vE 'debojit10\.github\.io|rivi\.co|locobuzz\.com|shortlyst\.ai|study\.iitm\.ac\.in|tiitcollege\.org|coursera\.org|kaggle\.com|linkedin\.com|github\.com' ; then
+            echo "::error::an unexpected third-party URL appeared in the page"
+            exit 1
+          fi
+          for pat in 'assets/fonts/' 'assets/css/main.css' 'assets/js/main.js'; do
+            grep -q "$pat" _site/index.html || { echo "::error::missing $pat"; exit 1; }
+          done
+          echo "identity and origin clean"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: site
+          path: _site
+          retention-days: 7

@@ -1,10 +1,22 @@
 ---
-layout: not_found
-title: 404
+layout: default
+title: Page not found — Debojit Nath
 permalink: /404.html
 ---
-{% include switch.html %}
-<div class="name">Brittany Chiang</div>
-<img src="{{site.baseurl}}/img/emojis/thinking-face.png" alt="">
-<h1>Hmmm...</h1>
-<h2>Looks like there's nothing here.<br>Maybe you should go back <a href="{{site.url}}">home</a>.</h2>
+<main id="main" class="sheet sheet--404">
+  <section class="hero">
+    <p class="hero__eyebrow meta">
+      <span>Error</span>
+      <span>404</span>
+    </p>
+    <div class="hero__rule" aria-hidden="true"></div>
+    <h1 class="masthead masthead--404">Not found</h1>
+    <p class="deck">
+      This page doesn't exist — or it did, and doesn't any more. Either way, the evidence is on the front page.
+    </p>
+    <p class="hero__contact">
+      <a href="{{ '/' | relative_url }}">Back to the front page<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+      <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+    </p>
+  </section>
+</main>

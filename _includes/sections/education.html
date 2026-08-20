@@ -1,0 +1,48 @@
+{%- comment -%}
+  05 — Education & credentials. One section, not two: certifications are back
+  matter to the degrees, not a peer of them.
+
+  Dot leaders are drawn as a repeating radial-gradient rather than typed
+  periods, so they fill whatever space is left at every viewport exactly as a
+  typeset table of contents does, with nothing to misalign.
+
+  Certifications take lowercase roman numerals — the back-matter convention —
+  which separates them from the arabic section numbers without inventing a new
+  visual device.
+{%- endcomment -%}
+<section class="section reveal" id="education" aria-labelledby="education-title">
+  <div class="section__head">
+    <span class="section__numeral" aria-hidden="true">05</span>
+    <h2 class="section__title" id="education-title">Education &amp; credentials</h2>
+  </div>
+
+  <div class="index">
+    {%- for s in site.data.education %}
+    <div class="index-row index-row--leader">
+      <p class="index-row__label meta" aria-hidden="true">{{ s.start }}–{{ s.end }}</p>
+      <a class="leader-row" href="{{ s.url }}" rel="noopener" target="_blank">
+        <span class="leader-row__title">{{ s.school }}</span>
+        <span class="leader" aria-hidden="true"></span>
+        <span class="leader-row__value">{{ s.degree }}{% if s.detail %} · {{ s.detail }}{% endif %}</span>
+        <span class="vh">, {{ s.start }} to {{ s.end }}</span>
+      </a>
+    </div>
+    {%- endfor %}
+  </div>
+
+  <h3 class="index__sublabel meta">Certifications</h3>
+
+  <div class="index">
+    {%- assign roman = 'i,ii,iii,iv,v,vi,vii,viii' | split: ',' -%}
+    {%- for c in site.data.certifications %}
+    <div class="index-row index-row--leader">
+      <p class="index-row__label index-row__label--roman" aria-hidden="true">{{ roman[forloop.index0] }}</p>
+      <a class="leader-row" href="{{ c.url }}" rel="noopener" target="_blank">
+        <span class="leader-row__title">{{ c.name }}<span class="leader-row__issuer"> · {{ c.issuer }}</span></span>
+        <span class="leader" aria-hidden="true"></span>
+        <span class="leader-row__value leader-row__value--link">Verify<svg class="icon" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></span>
+      </a>
+    </div>
+    {%- endfor %}
+  </div>
+</section>

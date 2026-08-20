@@ -1,0 +1,59 @@
+{%- comment -%}
+  Sticky 44px running head — a printed page's running head, not a navbar.
+  Opaque, never a backdrop-filter: it shimmers over a page made of 1px hairlines
+  and this design has no reason to show content sliding under glass.
+
+  Every uppercase run here is authored in sentence case and transformed in CSS.
+  VoiceOver and NVDA spell literal capitals letter by letter.
+{%- endcomment -%}
+<header class="running-head" role="banner">
+  {%- comment -%}
+    The role is dropped below 480px rather than letting text-overflow truncate
+    the name mid-word ("Debojit Nath — ML En…").
+  {%- endcomment -%}
+  <p class="running-head__id">{{ site.name }}<span class="running-head__role"> — {{ site.role }}</span></p>
+
+  {%- comment -%}
+    Rendered only on pages that set `nav: true` in their front matter. On 404
+    these would be six anchors pointing at sections that do not exist on the
+    page — dead links html-proofer is right to fail.
+  {%- endcomment -%}
+  {%- if page.nav %}
+  <nav class="running-head__nav" aria-label="Sections">
+    {%- comment -%}
+      The aria-label repeats the visible numeral before naming the section.
+      WCAG 2.5.3 Label in Name requires the visible label to appear in the
+      accessible name, so "1 — About" against a visible "01" was a failure.
+    {%- endcomment -%}
+    {%- for n in site.nav -%}
+      {%- assign num = forloop.index | prepend: '0' | slice: -2, 2 %}
+    <a class="numeral" href="#{{ n.id }}" aria-label="{{ num }} — {{ n.label }}">{{ num }}</a>
+    {%- endfor %}
+  </nav>
+  {%- endif %}
+
+  {%- comment -%}
+    A real radio group, not a two-state button. "Following the OS" is a state
+    the visitor has to be able to see and get back to — a toggle makes it
+    invisible and unrecoverable. Arrow-key navigation and group labelling come
+    free with the native element.
+  {%- endcomment -%}
+  <fieldset class="theme">
+    <legend class="vh">Theme</legend>
+    {%- assign modes = 'system,light,dark' | split: ',' -%}
+    {%- assign labels = 'Sys,Lgt,Drk' | split: ',' -%}
+    {%- for m in modes %}
+    <input class="vh theme__input" type="radio" name="theme" id="theme-{{ m }}" value="{{ m }}"
+      {% if m == 'system' %}checked{% endif %}>
+    {%- comment -%}
+      The visible token is NOT aria-hidden, so the accessible name starts with
+      it — "Lgt, light theme" rather than "Light theme" against a visible "LGT",
+      which failed WCAG 2.5.3 Label in Name.
+    {%- endcomment -%}
+    <label class="theme__cell" for="theme-{{ m }}">
+      <span>{{ labels[forloop.index0] }}</span>
+      <span class="vh">, {{ m }} theme{% if m == 'system' %} — follow the operating system{% endif %}</span>
+    </label>
+    {%- endfor %}
+  </fieldset>
+</header>

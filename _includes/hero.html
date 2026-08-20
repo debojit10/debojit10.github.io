@@ -1,0 +1,106 @@
+{%- comment -%}
+  Hero: eyebrow, chapter rule, masthead, deck, key-figures ledger, spec row,
+  contact line — in that order.
+
+  ABOVE-THE-FOLD BUDGET. The complete ledger must be visible without scrolling
+  on a 1280×720 laptop, costed for the worst case of a masthead that wraps to
+  two lines. The spec row and contact line sit BELOW the ledger to pay for it.
+  Nothing may be inserted between the chapter rule and the ledger. That space
+  is spent.
+{%- endcomment -%}
+<section class="hero" aria-labelledby="masthead">
+
+  <p class="hero__eyebrow meta">
+    <span>Selected work &amp; systems</span>
+    <span>2022 — {{ site.time | date: '%Y' }}</span>
+  </p>
+
+  <div class="hero__rule" aria-hidden="true"></div>
+
+  <h1 class="masthead" id="masthead">{{ site.name }}</h1>
+
+  <p class="deck">{{ site.tagline | strip_newlines | strip }}</p>
+
+  {%- comment -%}
+    The page's own specification, in the right-hand note rail. The status line
+    is the availability signal a hiring manager needs, and it is deliberately a
+    mono key/value line rather than a badge: a badge would breach accent
+    scarcity and a blinking dot would fail WCAG 2.2.2.
+  {%- endcomment -%}
+{%- comment -%}
+    Each line is authored to fit the 176px note channel on one line at 11px
+    mono. Longer phrasings wrapped mid-phrase, which reads as a bug rather than
+    as marginalia — so the copy is cut to the column, not the column to the
+    copy.
+  {%- endcomment -%}
+  <div class="hero__spec note meta">
+    <span>{{ site.role }}</span>
+    <span>LLM systems &amp; evals</span>
+    <span>{{ site.location }} · UTC+05:30</span>
+    <span>Open to LLM roles</span>
+    <span>Revised {{ site.time | date: '%b %Y' }}</span>
+  </div>
+
+  {%- comment -%}
+    THE LEDGER — the twenty-second payload, and the reason nothing animates
+    here. The numbers are server-rendered and readable at t=0. Only the
+    hairlines draw in.
+
+    Built with the hairline-gap technique (1px grid gap over a --rule
+    background) rather than border arithmetic, so the 2×2 reflow needs no
+    :nth-child special cases and the cross appears on its own.
+  {%- endcomment -%}
+  <dl class="ledger">
+    {%- for m in site.data.metrics %}
+    <div class="ledger__cell" style="--i: {{ forloop.index }}">
+      <dt class="meta">{{ m.label }}</dt>
+      <dd>
+        <span class="fig-lg">
+          <span class="fig-lg__value">{{ m.value }}</span>
+          {%- if m.unit and m.unit != '' %}<span class="fig-lg__unit">{{ m.unit }}</span>{% endif %}
+        </span>
+      {%- comment -%}
+        No readout strip here, deliberately. The governing rule is: no readout
+        without two real values. We know the response-quality GAIN was 26% but
+        not the baseline it moved from; "30K+ chats" has no denominator; "7
+        tenants" has no cap. Drawing a bar for any of them would invent the
+        missing half — fabricated telemetry on a page whose whole argument is
+        that this person keeps systems honest. The two project readouts survive
+        because 0.9845-of-1 and 66→69-of-100 are both genuinely two values.
+      {%- endcomment -%}
+        <span class="ledger__caption">{{ m.detail }}</span>
+      </dd>
+    </div>
+    {%- endfor %}
+  </dl>
+
+  {%- comment -%}
+    Second-tier numbers the four-cell table deliberately excludes. Plain
+    --muted throughout: marking these in accent would flatten the distinction
+    the ledger exists to make.
+  {%- endcomment -%}
+  <p class="hero__spec-row meta">
+    <span>33% code-execution lift</span>
+    <span>2 channels</span>
+    <span>3 environments</span>
+    <span>86% tweet-signal accuracy</span>
+    <span>30M+ profiles indexed</span>
+  </p>
+
+{%- comment -%}
+    Separators are real elements, not an ::after on the anchor: content
+    generated inside a link inherits its underline and accent, and there is no
+    way to opt out from within.
+  {%- endcomment -%}
+  <p class="hero__contact">
+    <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+    {%- for s in site.social -%}
+      {%- unless s.icon == 'mail' %}
+    <span class="sep" aria-hidden="true">·</span>
+    <a href="{{ s.url }}" rel="me noopener" target="_blank">{{ s.name }}<svg class="icon" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></a>
+      {%- endunless -%}
+    {%- endfor %}
+    <span class="sep" aria-hidden="true">·</span>
+    <a href="{{ site.resume | relative_url }}" download="{{ site.resume_filename }}">Résumé (PDF)<svg class="icon" aria-hidden="true"><use href="#i-download"/></svg></a>
+  </p>
+</section>

@@ -1,0 +1,30 @@
+# External links rot on their own schedule, so they are checked on one — never
+# on a push, where a rate-limited third party would fail an unrelated commit.
+name: external links
+
+on:
+  schedule:
+    - cron: '0 6 1 * *'   # 06:00 UTC on the 1st of each month
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  external:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+      - run: bundle exec jekyll build
+      - name: Check outbound links
+        run: |
+          gem install html-proofer --no-document
+          htmlproofer ./_site \
+            --checks Links \
+            --enforce-https false \
+            --ignore-status-codes "403,429,999" \
+            --swap-urls '^https\://debojit10\.github\.io:'

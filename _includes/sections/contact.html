@@ -1,0 +1,39 @@
+{%- comment -%}
+  06 — Contact and colophon. The compositional close-bracket: the email takes
+  the same outdent as the masthead, and it is the only other place on the page
+  that outdent occurs. The page opens and closes on the same gesture and
+  nothing between them does.
+
+  The colophon is not filler. It is the last thing an engineer reads, and it
+  states exactly how the artefact in front of them was made — the same speech
+  act as the rest of the page.
+{%- endcomment -%}
+<section class="section section--contact reveal" id="contact" aria-labelledby="contact-title">
+  <div class="section__head">
+    <span class="section__numeral" aria-hidden="true">06</span>
+    <h2 class="section__title" id="contact-title">Contact</h2>
+  </div>
+
+  <a class="contact__email" href="mailto:{{ site.email }}">{{ site.email }}</a>
+
+  <p class="contact__links">
+    {%- for s in site.social -%}
+      {%- unless s.icon == 'mail' %}
+    <a href="{{ s.url }}" rel="me noopener" target="_blank">
+      <svg class="icon" aria-hidden="true"><use href="#i-{{ s.icon }}"/></svg>{{ s.name }}</a>
+      {%- endunless -%}
+    {%- endfor %}
+    <a href="{{ site.resume | relative_url }}" download="{{ site.resume_filename }}">
+      <svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Résumé (PDF)</a>
+  </p>
+
+  <footer class="colophon">
+    <p>Status: open to LLM / eval roles · {{ site.location }} · UTC+05:30</p>
+    <p>
+      Set in Newsreader and IBM Plex Mono. Built with Jekyll, one hand-written stylesheet and one file of vanilla
+      JavaScript. No framework, no imagery, no tracking. <a href="https://github.com/debojit10/debojit10.github.io"
+        rel="noopener" target="_blank">Source</a>.
+    </p>
+    <p>© {{ site.time | date: '%Y' }} {{ site.name }} · Last revised {{ site.time | date: '%d %B %Y' }}</p>
+  </footer>
+</section>

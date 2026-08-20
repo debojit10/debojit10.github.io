@@ -1,0 +1,1479 @@
+@charset "utf-8";
+/* ============================================================================
+   PROOF EDITION — debojit10.github.io
+   ----------------------------------------------------------------------------
+   The whole stylesheet. Plain CSS on purpose: custom properties do everything
+   variables-and-nesting used to, so there is no preprocessor between what is
+   in this repo and what ships, and no build step that can fail on GitHub Pages.
+
+   CONTENTS
+     01  Tokens — colour, spacing, grid, motion
+     02  Fonts
+     03  Type scale
+     04  Reset and base elements
+     05  Utilities
+     06  The sheet — grid system
+     07  Running head
+     08  Hero, ledger, readouts
+     09  Sections — shared chrome
+     10  About
+     11  Experience
+     12  Projects
+     13  Skills
+     14  Education and credentials
+     15  Contact and colophon
+     16  Motion
+     17  Responsive
+     18  Print
+
+   TWO RULES LATER EDITS MUST NOT BREAK
+     1. ACCENT SCARCITY. --accent appears in exactly five roles: index numerals
+        (the arabic 01-06 section numbers and the roman i-iv back-matter
+        numbers), links, the .fig underline, readout fills, and the focus ring
+        plus ::selection. Nothing else may take it. An "available for hire"
+        badge, a red hover on skill tags, a red band behind a section — each
+        looks fine alone, and together they destroy the page's authority.
+     2. NO FILLS. Every surface is --paper. There is no tint, no card, no
+        sunken plate. The one exception is mechanical: --rule is the background
+        of the two hairline-gap grids so it shows through their 1px gaps. It is
+        never a visible surface.
+   ========================================================================== */
+
+
+/* ==========================================================================
+   01  TOKENS
+   --------------------------------------------------------------------------
+   Every ratio below was computed with the WCAG 2.x relative-luminance formula,
+   not estimated. The bars enforced here are stricter than AA:
+       body text      >= 7.0:1   (AAA)
+       all other text >= 4.5:1   (including the 11px mono marginalia)
+       every border   >= 4.5:1   (WCAG only asks 3:1 for non-text)
+   in both themes and in print. The ramp is strictly monotonic in both themes,
+   so raising the hairlines did not flatten the hierarchy:
+       LIGHT  rule 4.62 < edge 6.04 < muted 7.27 < ink-2 9.09 < ink 17.48
+       DARK   rule 4.59 < edge 5.99 < muted 7.13 < ink-2 9.51 < ink 16.06
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* ---- light ------------------------------------ ground: --paper #FBF8F3 */
+  --paper:       #fbf8f3;  /* warm uncoated stock. Never #fff: pure white
+                              behind a serif reads as a word processor.       */
+  --ink:         #16130f;  /* 17.48:1  AAA  body, masthead, figures           */
+  --ink-2:       #4a443b;  /*  9.09:1  AAA  deck, descriptions, skill items   */
+  --muted:       #595248;  /*  7.27:1  AAA  all 11-13px mono marginalia, and
+                              every inline " · " separator — those are the
+                              sole delimiter between 45 skill items, so they
+                              are load-bearing text, not decoration.          */
+  --edge:        #655e53;  /*  6.04:1       border of interactive controls    */
+  --rule:        #777065;  /*  4.62:1       every 1px hairline. On a page with
+                              zero imagery each hairline IS the design, so it
+                              has to survive a dim or glare-lit laptop panel. */
+  --rule-strong: var(--ink);         /* 17.48:1  3px chapter rules, bullet dash */
+  --accent:      #b4302a;  /*  5.84:1  AA at small text, so numerals and
+                              inline links need no size exemption. The raw
+                              vermilion #d6402a measured 4.29:1 and was
+                              rejected rather than reserved for large text.   */
+
+  /* ---- spacing: a hard scale. No intermediate values are permitted. ------ */
+  --s1:  4px;  --s2:  8px;  --s3: 12px; --s4:  16px; --s5:  24px;
+  --s6: 32px;  --s7: 48px;  --s8: 64px; --s9: 96px;  --s10: 128px;
+
+  /* ---- grid — gutters are padding, not tracks, so no phantom gap appears
+     at the page edge. Max sheet width 1168px plus gutters. ----------------- */
+  --gutter:  clamp(1.25rem, 4vw, 4.5rem);   /*  20 ->  72px */
+  --col-gap: clamp(1.5rem,  3vw, 3.5rem);   /*  24 ->  56px */
+  --rail:    14rem;   /* 224px  left rail:  index and chronology  */
+  --body-w:  41rem;   /* 656px  prose measure, ~66ch at 18px      */
+  --note:    11rem;   /* 176px  right rail: specification channel */
+  --head-h:  44px;
+
+  --tracks:
+    [rail-start] minmax(0, var(--rail))
+    [rail-end body-start] minmax(0, var(--body-w))
+    [body-end note-start] minmax(0, var(--note)) [note-end];
+
+  /* ---- motion ----------------------------------------------------------- */
+  --ease:   cubic-bezier(.2, .7, .2, 1);
+  --t-fast: 180ms;
+  --t:      320ms;
+}
+
+/* Declared twice on purpose. This block serves no-JS and pre-JS paints and is
+   guarded so an explicit light choice always wins; the [data-theme] block below
+   serves the theme the bootstrap script resolved. Never give a colour its only
+   definition inside one of them. */
+@media screen and (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper:       #14120f;  /* warm press-black; a neutral #111 kills the paper */
+    --ink:         #f3ede3;  /* 16.06:1  AAA — pure #fff haloes badly at 132px */
+    --ink-2:       #c0b8aa;  /*  9.51:1  AAA */
+    --muted:       #a69f94;  /*  7.13:1  AAA */
+    --edge:        #989186;  /*  5.99:1 */
+    --rule:        #847d72;  /*  4.59:1 */
+    --rule-strong: var(--ink);
+    --accent:      #ff7a5c;  /*  7.29:1  AAA — vermilion; the light red dies on black */
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper:       #14120f;
+  --ink:         #f3ede3;
+  --ink-2:       #c0b8aa;
+  --muted:       #a69f94;
+  --edge:        #989186;
+  --rule:        #847d72;
+  --rule-strong: var(--ink);
+  --accent:      #ff7a5c;
+}
+
+:root[data-theme="light"] { color-scheme: light; }  /* light values inherit :root */
+
+
+/* ==========================================================================
+   02  FONTS
+   --------------------------------------------------------------------------
+   Self-hosted, OFL, latin-subset. See assets/fonts/README.md.
+
+   Newsreader carries 11px marginalia to a 132px masthead on one family, which
+   is only possible because its optical-size axis is kept live: at 132px the
+   fit tightens and stroke contrast rises, at 12px stems thicken and spacing
+   opens, automatically. That is the whole editorial thesis — dramatic scale
+   contrast from size and weight, never from mixing typefaces — enforced by the
+   font binary rather than by discipline.
+
+   The italic pins opsz to 20 because italic never appears outside 16-32px.
+
+   The two @font-face fallbacks are metric-adjusted so the swap moves nothing.
+   The mono one matters more than it looks: a column of five rail dates
+   shifting together is far more visible than one heading reflowing.
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Newsreader';
+  src: url('../fonts/newsreader-roman-var.woff2') format('woff2-variations'),
+       url('../fonts/newsreader-roman-var.woff2') format('woff2');
+  font-weight: 300 500;
+  font-stretch: 100%;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Newsreader';
+  src: url('../fonts/newsreader-italic.woff2') format('woff2-variations'),
+       url('../fonts/newsreader-italic.woff2') format('woff2');
+  font-weight: 300 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('../fonts/plex-mono-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('../fonts/plex-mono-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Metric-adjusted fallbacks — no layout shift when the real faces land. */
+@font-face {
+  font-family: 'Newsreader-fb';
+  src: local('Georgia'), local('Times New Roman'), local('Times'),
+       local('Tinos'), local('Noto Serif'), local('Droid Serif');
+  size-adjust: 96%; ascent-override: 92%; descent-override: 24%; line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'PlexMono-fb';
+  src: local('Consolas'), local('Menlo'), local('DejaVu Sans Mono'),
+       local('Cousine'), local('Noto Sans Mono'), local('Droid Sans Mono');
+  size-adjust: 103%; ascent-override: 82%; descent-override: 22%; line-gap-override: 0%;
+}
+
+
+/* ==========================================================================
+   03  TYPE SCALE
+   --------------------------------------------------------------------------
+   THE SYSTEM, stated once: anything that is prose is the serif; anything that
+   is not prose is the mono. There is no third register and no sans-serif on
+   this page. The mono is load-bearing — it is the typeface of a trace viewer,
+   and it is what stops a serif-dominant page reading as an essayist's blog to
+   the engineer skimming it in twenty seconds. If a later edit introduces a
+   sans "for readability", or rounds the skill tags into pills, the page stops
+   being this document.
+
+   Every ceiling here is load-bearing for the above-the-fold budget: the
+   complete ledger must be visible without scrolling on a 1280x720 laptop.
+   ========================================================================== */
+
+:root {
+  --serif: 'Newsreader', 'Newsreader-fb', 'Iowan Old Style', 'Source Serif 4',
+           Georgia, 'Times New Roman', serif;
+  --mono:  'IBM Plex Mono', 'PlexMono-fb', ui-monospace, SFMono-Regular,
+           'Cascadia Mono', Consolas, 'Liberation Mono', monospace;
+
+  --fs-masthead: clamp(3.25rem, 9.2vw, 8.25rem);           /*  52 -> 132px  w300 */
+  --fs-email:    clamp(1.375rem, 3.6vw, 2.75rem);          /*  22 ->  44px  w300
+                              Ceiling set by measurement: the address is 25
+                              characters and must fit the 936px rail-start ->
+                              body-end span on one line. */
+  --fs-fig:      clamp(2.25rem, 1.6rem + 2.7vw, 4rem);     /*  36 ->  64px  w300 */
+  --fs-h2:       clamp(1.75rem, 1.25rem + 2vw, 2.625rem);  /*  28 ->  42px  w300 */
+  --fs-deck:     clamp(1.25rem, 1rem + 1.1vw, 2rem);       /*  20 ->  32px  italic 300 */
+  --fs-h3:       clamp(1.25rem, 1.1rem + .5vw, 1.5rem);    /*  20 ->  24px  w500 */
+  --fs-body:     clamp(1rem, .95rem + .22vw, 1.125rem);    /*  16 ->  18px  w400 */
+  --fs-tag:      .8125rem;   /* 13px mono 400 */
+  --fs-meta:     .75rem;     /* 12px mono 500, uppercase, +.16em */
+  --fs-micro:    .6875rem;   /* 11px mono 500, uppercase, +.18em */
+}
+
+
+/* ==========================================================================
+   04  RESET AND BASE
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  background: var(--paper);
+  /* Not just scroll-margin on the sections: this is what stops the sticky
+     running head covering an element that keyboard focus scrolls into view,
+     which Shift+Tab hits constantly. */
+  scroll-padding-top: calc(var(--head-h) + var(--s3));
+  font-optical-sizing: auto;                       /* drives Newsreader's opsz */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: 1.62;
+  /* Not cosmetic: this is what makes the column of five rail dates and the four
+     ledger cells align to the pixel, and it is why the ledger can reflow 4-up,
+     2x2 and stacked without re-measuring anything. */
+  font-variant-numeric: tabular-nums lining-nums;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color var(--t-fast) ease, color var(--t-fast) ease;
+}
+
+h1, h2, h3, h4, p, dl, dd, dt, ul, ol, figure, fieldset { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+fieldset { border: 0; min-width: 0; }
+img, svg { max-width: 100%; }
+
+::selection { background: var(--accent); color: var(--paper); }
+
+/* The only radius in the stylesheet. Nothing else on this page is rounded. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* Links: a resting underline plus a wipe. The two are composed, not fighting —
+   text-decoration holds the resting state, the gradient does the wipe. */
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: .18em;
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size 220ms var(--ease), text-decoration-thickness 220ms var(--ease);
+}
+a:hover, a:focus-visible {
+  background-size: 100% 1px;
+  text-decoration-thickness: 2px;
+}
+
+strong { font-weight: 500; }
+
+/* Theme-colour transitions are scoped to an explicit short list. Never put a
+   transition on `*` — it repaints the whole page on every hover. */
+.running-head, .section, .role, .ledger, .ledger__cell, .index-row, .theme,
+.project, .employer {
+  transition: background-color var(--t-fast) ease, border-color var(--t-fast) ease;
+}
+
+
+/* ==========================================================================
+   05  UTILITIES
+   ========================================================================== */
+
+/* Uppercase is a CSS property, never a character. Screen readers spell literal
+   capitals letter by letter, and "RAG" versus "rag" is already a coin flip. */
+.meta {
+  font-family: var(--mono);
+  font-size: var(--fs-meta);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* THE RED-PEN FIGURE. Every metric inside prose is marked so a reader can hop
+   underline to underline and collect the quantified outcomes in a few seconds.
+   The text itself stays --ink at 17:1, so the accent carries zero contrast
+   burden while still catching the eye. It is literally a red pen underlining
+   the claims. */
+.fig {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: .92em;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums lining-nums;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: .22em;
+}
+
+.icon {
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: none;
+  vertical-align: -.12em;
+  flex: none;
+}
+.icon use { pointer-events: none; }
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+.vh {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip {
+  position: absolute;
+  top: 0; left: 0;
+  z-index: 100;
+  transform: translateY(-120%);
+  padding: var(--s3) var(--s5);
+  background: var(--paper);
+  border: 1px solid var(--edge);
+  font-family: var(--mono);
+  font-size: var(--fs-meta);
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background-image: none;
+}
+.skip:focus-visible { transform: translateY(0); }
+
+.arrow-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;   /* standalone target, so 2.5.8's inline exception does
+                         not cover it the way it covers the prose links */
+  gap: .5em;
+  font-family: var(--mono);
+  font-size: var(--fs-tag);
+  letter-spacing: .06em;
+  color: var(--accent);
+}
+
+.print-head { display: none; }
+
+
+/* ==========================================================================
+   06  THE SHEET — GRID SYSTEM
+   --------------------------------------------------------------------------
+   Three tracks, each with exactly one job.
+
+     LEFT RAIL (224px)   index and chronology. Section numerals, employment
+                         date ranges, skill category labels and counts, degree
+                         years, certification numerals. Always mono, always
+                         --muted, always right-aligned to the rail edge, so one
+                         vertical column of dates runs the height of the page.
+     BODY (656px)        everything else.
+     RIGHT NOTE (176px)  the specification channel: what a thing is made of.
+                         The hero's own spec, then every role's and project's
+                         `stack:`. About is deliberately empty — one column of
+                         air is what stops it reading as a sidebar.
+
+   THE OUTDENT SYSTEM, which is the composition:
+     Three objects span rail-start -> note-end: the hero rule, the ledger, and
+     every section's chapter rule.
+     Two objects outdent to rail-start but stop at body-end: the masthead and
+     the closing email.
+     Nothing else ever leaves the body track. The page opens and closes on the
+     same gesture and nothing between them does.
+
+   Each band repeats the same track definition rather than using subgrid, so
+   alignment holds identically on every engine with no fallback path to test.
+   ========================================================================== */
+
+.sheet { display: block; }
+
+.hero,
+.section,
+.section__head,
+.role,
+.index-row {
+  display: grid;
+  grid-template-columns: var(--tracks);
+  column-gap: var(--col-gap);
+  justify-content: center;
+}
+
+.hero, .section { padding-inline: var(--gutter); }
+
+/* Nested bands already sit inside the padded track span, so they must not
+   re-apply the gutter. */
+.section__head, .role, .index-row { grid-column: rail-start / note-end; }
+
+.note { grid-column: note; text-align: right; }
+
+
+/* ==========================================================================
+   07  RUNNING HEAD
+   --------------------------------------------------------------------------
+   A printed page's running head, not a navbar. Opaque, never a
+   backdrop-filter: it composites unpredictably over the accent, forces a
+   layer, and shimmers over a page made almost entirely of 1px hairlines.
+   ========================================================================== */
+
+.running-head {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: var(--s5);
+  height: var(--head-h);
+  padding-inline: var(--gutter);
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+}
+
+.running-head__id {
+  min-width: 0;   /* without this a flex item never shrinks below its content,
+                     so the ellipsis never fires and the header overflows */
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.running-head__nav {
+  display: flex;
+  gap: var(--s4);
+  margin-left: auto;
+}
+
+.numeral {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--head-h);
+  min-width: 24px;             /* 44px tall but only ~20px wide before this */
+  justify-content: center;
+  padding-inline: 2px;
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: .18em;
+  color: var(--muted);
+  text-decoration: none;
+  background-image: none;
+}
+.numeral:hover { color: var(--ink); }
+/* No animation on the change: animating the index pulls the eye away from the
+   content it describes. */
+.numeral[aria-current="true"] {
+  color: var(--accent);
+  box-shadow: inset 0 -1px 0 var(--accent);
+}
+
+/* A real radio group. "Following the OS" is a state the visitor has to be able
+   to see and return to; a two-state toggle makes it invisible once pressed. */
+.theme {
+  display: flex;
+  margin-left: auto;   /* `auto` so the control still sits hard right on pages
+                          that render no nav, e.g. 404 */
+  border: 1px solid var(--edge);
+  border-radius: 1px;
+}
+.running-head__nav { margin-left: auto; }
+.running-head__nav + .theme { margin-left: var(--s5); }
+
+.theme__cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: calc(var(--head-h) - 10px);
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+}
+.theme__cell + .theme__input + .theme__cell,
+.theme__input + .theme__cell:not(:first-of-type) { border-left: 1px solid var(--edge); }
+
+/* Three cues, none of them accent: a control state is not one of the five
+   accent uses. */
+.theme__input:checked + .theme__cell {
+  color: var(--ink);
+  font-weight: 500;
+  box-shadow: inset 0 -2px 0 var(--ink);
+}
+.theme__input:focus-visible + .theme__cell {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+
+/* ==========================================================================
+   08  HERO, LEDGER, READOUTS
+   --------------------------------------------------------------------------
+   ABOVE-THE-FOLD BUDGET, costed for the worst case of a two-line masthead:
+     head 44 + pad 64 + eyebrow 23 + rule 19 + masthead 232 + 24 + deck 82
+     + 32 + ledger cell 189  =  709px
+   The complete ledger is therefore visible without scrolling at 720px of
+   viewport height. NOTHING may be inserted between the chapter rule and the
+   ledger — the spec row and contact line sit below it to pay for this. That
+   space is spent.
+   ========================================================================== */
+
+.hero {
+  padding-top: var(--s8);
+  padding-bottom: var(--s8);
+  grid-template-rows: repeat(7, auto);
+}
+
+.hero__eyebrow {
+  grid-column: rail-start / note-end;
+  grid-row: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s4);
+  margin-bottom: var(--s2);
+}
+
+.hero__rule {
+  grid-column: rail-start / note-end;
+  grid-row: 2;
+  height: 3px;
+  background: var(--rule-strong);
+  margin-bottom: var(--s4);
+  transform-origin: left;
+}
+
+.masthead {
+  grid-column: rail-start / body-end;
+  grid-row: 3;
+  font-size: var(--fs-masthead);
+  font-weight: 300;
+  line-height: .88;
+  letter-spacing: -.035em;
+  margin-bottom: var(--s5);
+  /* Sentence case, no transform: it is a proper noun, and screen readers only
+     pronounce it correctly this way. */
+}
+
+.deck {
+  grid-column: body;
+  grid-row: 4;
+  max-width: 52ch;
+  font-size: var(--fs-deck);
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.28;
+  letter-spacing: -.012em;
+  color: var(--ink-2);
+  text-wrap: balance;
+}
+
+/* The note channel is only 176px wide. At the standard +.16em these lines
+   wrapped mid-phrase, so the rail gets its own tighter tracking and a smaller
+   size — it is marginalia, and marginalia is allowed to be quieter. */
+.note, .hero__spec {
+  font-size: var(--fs-micro);
+  letter-spacing: .1em;
+}
+
+.hero__spec {
+  grid-column: note;
+  grid-row: 3 / 5;
+  align-self: end;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  text-align: right;
+  line-height: 1.5;
+}
+
+/* ---- the ledger ---------------------------------------------------------
+   The twenty-second payload, and the reason nothing animates here: the numbers
+   are server-rendered and readable at t=0.
+
+   Hairline-gap technique — a 1px grid gap over a --rule background — instead
+   of border arithmetic. Perfect dividers, no :nth-child special cases, and the
+   2x2 reflow produces its cross on its own. */
+.ledger {
+  grid-column: rail-start / note-end;
+  grid-row: 5;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  margin-top: var(--s6);
+}
+
+.ledger__cell {
+  position: relative;
+  background: var(--paper);
+  padding: var(--s5) var(--s4) var(--s6);
+}
+/* The ledger spans rail-start -> note-end, so the outer cells carry no inside
+   padding: without this the first figure no longer aligns with the masthead
+   above it, and the whole left edge of the page loses its spine. */
+.ledger__cell:first-child { padding-inline-start: 0; }
+.ledger__cell:last-child { padding-inline-end: 0; }
+/* Each cell's top hairline is its own ::before, not the container's border,
+   precisely so the four can draw in independently on load. */
+.ledger__cell::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; left: 0;   /* longhand: `inset` is Safari 14.1+, and these
+                                  four hairlines are the whole ledger */
+  height: 1px;
+  background: var(--rule);
+  transform-origin: left;
+}
+
+.ledger dt { margin-bottom: var(--s2); }
+
+.fig-lg {
+  display: flex;
+  align-items: baseline;
+  gap: .06em;
+  font-size: var(--fs-fig);
+  font-weight: 300;
+  line-height: .92;
+  letter-spacing: -.025em;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.fig-lg__unit { font-size: .32em; letter-spacing: 0; }
+/* Hand-drawn, because none of the four self-hosted faces carry U+2192 and a
+   fallback-font arrow beside a 64px Newsreader numeral is instantly visible. */
+.fig-lg__arrow {
+  width: .62em;
+  height: .32em;
+  margin: 0 .1em;
+  flex: none;
+  align-self: center;
+  color: var(--ink);
+}
+
+.ledger__caption {
+  display: block;   /* it is a <span> inside the <dd>: `dl > div` may not
+                       contain a <p>, and the caption belongs to the term */
+  max-width: 22ch;
+  margin-top: var(--s3);
+  font-size: var(--fs-tag);
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+
+.hero__spec-row {
+  grid-column: body-start / note-end;
+  grid-row: 6;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--s3);
+  margin-top: var(--s5);
+  font-size: var(--fs-micro);
+  letter-spacing: .14em;
+}
+/* Second-tier by design. Marking these in accent would flatten the very
+   distinction the ledger exists to make. */
+.hero__spec-row span:not(:last-child)::after { content: ' ·'; }
+
+.hero__contact {
+  grid-column: body-start / note-end;
+  grid-row: 7;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2) var(--s4);
+  margin-top: var(--s5);
+  font-family: var(--mono);
+  font-size: var(--fs-tag);
+  letter-spacing: .04em;
+}
+.hero__contact a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;            /* WCAG 2.5.8 pointer target */
+  gap: .4em;
+  color: var(--accent);
+}
+.hero__contact .sep, .contact__links .sep { color: var(--muted); }
+
+/* ---- readouts -----------------------------------------------------------
+   Fill is never signalled by colour alone: --accent against --rule measures
+   only 1.26:1 in light and 1.59:1 in dark, so the lit layer is also 14px tall
+   against a 6px track, and the delta bars differ by outline-versus-solid as
+   well as by width. The comparison survives greyscale. */
+.readout { margin-top: var(--s4); }
+
+/* The strip is its own positioned box so the end labels can stay in normal
+   flow — absolutely positioning them made them collide with the caption. */
+/* 22px, not 14px: it has to match the delta variant's two stacked bars
+   (8 + 4 gap + 10) or the two project titles sit 8px out of line with each
+   other. The track and fill are bottom-anchored, so the extra height is
+   headroom above them and changes nothing visually. */
+.readout__strip { position: relative; height: 22px; }
+.readout__track,
+.readout__fill { position: absolute; bottom: 0; left: 0; display: block; }
+.readout__track {
+  right: 0;
+  height: 6px;
+  background-image: repeating-linear-gradient(90deg, var(--rule) 0 1px, transparent 1px 5px);
+}
+.readout__fill {
+  height: 14px;
+  background-image: repeating-linear-gradient(90deg, var(--accent) 0 1px, transparent 1px 5px);
+}
+
+.readout__bars { display: flex; flex-direction: column; gap: var(--s1); }
+.readout__bar { display: block; height: 8px; }
+.readout__bar--before { border: 1px solid var(--rule); }
+.readout__bar--after { height: 10px; background: var(--accent); }
+
+.readout__delta { color: var(--ink); }
+
+.readout__ends {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s3);
+  margin-top: var(--s2);
+  font-size: var(--fs-micro);
+  letter-spacing: .12em;
+}
+
+
+/* ==========================================================================
+   09  SECTIONS — SHARED CHROME
+   --------------------------------------------------------------------------
+   The Scotch double rule: a 3px rule with a 1px hairline exactly 5px below it,
+   spanning rail-start -> note-end. Both are drawn on .section__head so they
+   follow the track span rather than the padded page box.
+   ========================================================================== */
+
+/* 8rem top plus 8rem bottom put 256px of dead air between every pair of
+   sections, which read as a rendering fault rather than as generosity. */
+.section { padding-block: clamp(2.5rem, 5.5vw, 5rem); }
+
+.section__head {
+  position: relative;
+  padding-top: calc(3px + 5px + 1px + var(--s6));
+  margin-bottom: var(--s7);
+  align-items: baseline;
+}
+.section__head::before,
+.section__head::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+}
+.section__head::before { top: 0; height: 3px; background: var(--rule-strong); }
+.section__head::after  { top: 8px; height: 1px; background: var(--rule); }
+
+/* Mono cap height and serif cap height do not agree, so the numeral is
+   optically aligned to the title rather than baseline-aligned — baseline
+   alignment reads as a mistake here. */
+.section__numeral {
+  grid-column: rail;
+  justify-self: end;
+  font-family: var(--mono);
+  font-size: var(--fs-meta);
+  font-weight: 500;
+  letter-spacing: .16em;
+  color: var(--accent);
+  transform: translateY(-.34em);
+}
+
+.section__title {
+  grid-column: body;
+  font-size: var(--fs-h2);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  text-wrap: balance;
+}
+
+.section__foot { grid-column: body; margin-top: var(--s6); }
+
+/* No catch-all `grid-column` rule here. An earlier one carried specificity
+   (0,7,0) from its chained :not()s and silently overrode every explicit
+   placement further down the file — the colophon lost its full-sheet span that
+   way. Every section child is placed by name instead. */
+
+
+/* ==========================================================================
+   10  ABOUT
+   ========================================================================== */
+
+.prose { grid-column: body; }
+.prose p + p { margin-top: var(--s5); }
+.prose p { text-wrap: pretty; }
+.prose__aside { font-style: italic; color: var(--ink-2); }
+/* Inline prose links keep --ink text and let the accent do the underlining. */
+.prose a { color: var(--ink); }
+
+
+/* ==========================================================================
+   11  EXPERIENCE
+   ========================================================================== */
+
+.employer {
+  grid-column: rail-start / note-end;
+  display: grid;
+  grid-template-columns: var(--tracks);
+  column-gap: var(--col-gap);
+  justify-content: center;
+  padding-top: var(--s6);
+}
+.employer + .employer { border-top: 1px solid var(--rule); margin-top: var(--s6); }
+
+.employer__span {
+  grid-column: rail;
+  text-align: right;
+  padding-top: .5em;
+}
+.employer__name {
+  grid-column: body;
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -.01em;
+}
+
+.role {
+  grid-column: rail-start / note-end;
+  padding-block: var(--s5) var(--s6);
+}
+.role + .role { border-top: 1px solid var(--rule); }
+
+/* Four lines of CSS that turn "2023 to present" into a distance the reader can
+   feel: the range pins while its bullets scroll past. No JS, and nothing on
+   this page sets overflow:hidden, which is the one thing that would break it. */
+.role__dates {
+  grid-column: rail;
+  position: sticky;
+  top: calc(var(--head-h) + var(--s5));
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+  text-align: right;
+}
+.role__active { color: var(--ink); }
+
+/* The rail is 224px at its widest and 176px below 1180px. Standard +.16em
+   tracking overflows it, so the chronology column sets tighter and smaller —
+   it is marginalia, and marginalia is allowed to be quieter. */
+.role__dates, .employer__span {
+  font-size: var(--fs-micro);
+  letter-spacing: .1em;
+}
+
+.role__body { grid-column: body; }
+
+.role__client {
+  margin-bottom: var(--s2);
+  color: var(--muted);
+}
+.role__title {
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  line-height: 1.3;
+}
+.employer .role + .role .role__title,
+.role--client .role__title {
+  font-size: var(--fs-body);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ink-2);
+}
+
+.role__summary { margin-top: var(--s2); color: var(--ink-2); }
+
+.role__highlights { margin-top: var(--s4); }
+.role__highlights li {
+  position: relative;
+  padding-left: 1.75rem;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+.role__highlights li + li { margin-top: var(--s3); }
+/* --rule-strong, not accent: a list marker is neither a claim nor a control,
+   and a fifth apparent accent use is exactly where the discipline erodes. */
+.role__highlights li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: .78em;
+  width: 14px; height: 1px;
+  background: var(--rule-strong);
+}
+
+.role__stack {
+  grid-column: note;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+  text-align: right;
+  padding-top: .45em;
+}
+
+/* Nested inside the role it overlapped, not shown as a sibling. Deliberately
+   1px --rule and not a 2px accent bar, so accent scarcity survives. */
+/* The indent applies to the BODY column only. Indenting the whole grid row
+   also moved the date out of the rail, breaking the single vertical column of
+   dates that is the rail's entire job. */
+.role--client .role__body {
+  margin-inline-start: var(--s5);
+  border-inline-start: 1px solid var(--rule);
+  padding-inline-start: var(--s4);
+}
+
+
+/* ==========================================================================
+   12  PROJECTS
+   --------------------------------------------------------------------------
+   There are no screenshots and none will be invented, so the result is the
+   image: each project opens with its outcome as a large serif numeral. Same
+   hairline-gap technique, so the vertical rule between the two collapses to a
+   horizontal one when they stack, with no border arithmetic.
+   ========================================================================== */
+
+.projects {
+  grid-column: rail-start / note-end;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--rule);
+}
+
+.project {
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  padding: var(--s6) var(--s5);
+}
+/* The heading is first in the DOM (see the template) but the result reads
+   first, so the two swap visually. Only the title link is focusable, so no
+   focus-order mismatch is introduced. */
+.project__index  { order: 1; }
+.project__result { order: 2; }
+.project__name   { order: 3; }
+.project__desc   { order: 4; }
+.project__stack  { order: 5; }
+/* Same reason as the ledger: the outer edges belong to the page spine. */
+.project:first-child { padding-inline-start: 0; }
+.project:last-child { padding-inline-end: 0; }
+.project__index { margin-bottom: var(--s5); }
+
+.project__result {
+  padding-top: var(--s4);
+  border-top: 1px solid var(--rule);
+  margin-bottom: var(--s6);
+}
+.project__caption { margin-top: var(--s5); }
+
+.project__name {
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  line-height: 1.3;
+}
+.project__name a { display: inline-flex; align-items: baseline; gap: .35em; }
+
+.project__desc { margin-top: var(--s3); color: var(--ink-2); text-wrap: pretty; }
+
+.project__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--s3);
+  margin-top: var(--s5);
+}
+.project__stack span:not(:last-child)::after { content: ' ·'; }
+
+
+/* ==========================================================================
+   13  SKILLS
+   --------------------------------------------------------------------------
+   A back-of-book index. Forty-five tags as forty-five pills is the single most
+   template-looking thing a portfolio can do; an index has no boxes, no
+   borders, no fills and no hover states, and skims in three seconds.
+   ========================================================================== */
+
+.index { grid-column: rail-start / note-end; }
+
+.index-row { padding-block: var(--s5); }
+.index-row + .index-row { border-top: 1px solid var(--rule); }
+
+.index-row__label {
+  grid-column: rail;
+  text-align: right;
+  padding-top: .25em;
+}
+.index-row__label--roman {
+  font-family: var(--mono);
+  font-size: var(--fs-meta);
+  font-weight: 500;
+  letter-spacing: .16em;
+  color: var(--accent);
+}
+
+.index-row__items { grid-column: body; }
+.index-row__items li { display: inline; font-size: var(--fs-tag); color: var(--ink-2); }
+/* The sole delimiter between 45 inline items, therefore load-bearing text and
+   held to the small-text contrast bar — never a hairline colour. */
+.index-row__items li:not(:last-child)::after { content: ' · '; color: var(--muted); }
+
+.index__sublabel {
+  grid-column: body;
+  margin-top: var(--s8);
+  margin-bottom: var(--s3);
+}
+
+
+/* ==========================================================================
+   14  EDUCATION AND CREDENTIALS
+   --------------------------------------------------------------------------
+   Dot leaders drawn as a repeating radial-gradient rather than typed periods,
+   so they fill whatever space remains at every viewport exactly as a typeset
+   table of contents does, with nothing to misalign.
+   ========================================================================== */
+
+.leader-row {
+  /* Spans into the note channel, which this section does not otherwise use.
+     On the 656px body track alone a long title plus a long value left no room
+     for the leader and pushed it onto a second line. */
+  grid-column: body-start / note-end;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  gap: 0;
+  min-height: 44px;
+  padding-block: var(--s1);
+  text-decoration: none;
+  background-image: none;
+}
+.leader-row__title { min-width: 0; }
+.leader-row__value { flex: none; white-space: nowrap; }
+.leader-row__title {
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: .18em;
+}
+.leader-row:hover .leader-row__title,
+.leader-row:focus-visible .leader-row__title { text-decoration-thickness: 2px; }
+
+.leader-row__issuer { font-weight: 400; font-style: italic; color: var(--muted); }
+
+.leader-row__value {
+  font-size: var(--fs-tag);
+  font-family: var(--mono);
+  letter-spacing: .04em;
+  color: var(--ink-2);
+  text-align: right;
+}
+.leader-row__value--link {
+  display: inline-flex;
+  align-items: center;
+  gap: .4em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.leader {
+  flex: 1 1 auto;
+  align-self: end;
+  margin: 0 .6rem .55em;   /* lands the dots on the row's shared baseline:
+                              at 18px/1.62 the line box bottom is ~10px below
+                              it, and .55em of an 18px em is ~9.9px */
+  height: 2px;
+  background-image: radial-gradient(circle at 1px 1px, var(--rule) 1px, transparent 1px);
+  background-size: 6px 2px;
+  background-repeat: repeat-x;
+}
+
+
+/* ==========================================================================
+   15  CONTACT AND COLOPHON
+   ========================================================================== */
+
+.section--contact { padding-bottom: var(--s9); }
+
+.contact__email {
+  grid-column: rail-start / body-end;
+  font-size: var(--fs-email);
+  font-weight: 300;
+  line-height: .95;
+  letter-spacing: -.03em;
+  text-decoration: none;
+  background-position: 0 100%;
+  background-size: 0% 2px;
+  box-shadow: inset 0 -1px 0 var(--accent);
+  transition: background-size var(--t) var(--ease);
+  width: fit-content;
+  max-width: 100%;
+  overflow-wrap: anywhere;   /* a safety net, not the normal case */
+}
+.contact__email:hover, .contact__email:focus-visible { background-size: 100% 2px; }
+
+.contact__links {
+  grid-column: body;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s3) var(--s5);
+  margin-top: var(--s7);
+  font-family: var(--mono);
+  font-size: var(--fs-tag);
+  letter-spacing: .04em;
+}
+.contact__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  gap: .5em;
+  color: var(--accent);
+}
+
+.colophon {
+  grid-column: rail-start / note-end;
+  margin-top: var(--s8);
+  padding-top: var(--s5);
+  border-top: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  line-height: 1.7;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.colophon p { max-width: 68ch; }   /* the measure is the text's, not the box's —
+                                      on the box it also cut the rule above */
+.colophon a { color: var(--muted); }
+
+
+/* ==========================================================================
+   16  MOTION
+   --------------------------------------------------------------------------
+   Nothing moves that the reader did not ask to move, and nothing at all moves
+   on the evidence. No parallax, no scroll-jacking, no counting-up numbers, no
+   hover-lift, no theme wipe, no blink. A count-up on the headline figures
+   would mean that for 700ms every number on a page arguing "I keep numbers
+   honest" is wrong.
+
+   THE PRESS-RUN is the one theatrical moment, and it is a printing press: the
+   hero rule and the four ledger hairlines lay themselves down left to right.
+   Five composited transforms, once, under a second.
+   ========================================================================== */
+
+@keyframes ink { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+.js .hero__rule,
+.js .ledger__cell::before {
+  animation: ink 520ms var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+
+/* Authored visible; the .js class arms the hidden state, so a visitor with
+   JavaScript blocked never gets content that stays invisible. */
+.reveal { opacity: 1; transform: none; }
+.js .reveal { opacity: 0; transform: translateY(8px); }
+.js .reveal.is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity var(--t) ease, transform var(--t) var(--ease);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+/* A real fallback, not a blanket kill. The global duration clamp alone would
+   strand anything mid-keyframe at opacity 0 or scaleX 0, so the two targeted
+   overrides below are the load-bearing half. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal, .js .reveal { opacity: 1 !important; transform: none !important; }
+  .hero__rule, .ledger__cell::before { transform: none !important; }
+}
+
+
+/* ==========================================================================
+   17  RESPONSIVE
+   ========================================================================== */
+
+/* Buy back the fold on a short laptop screen. */
+@media screen and (max-height: 860px) and (min-width: 861px) {
+  .hero { padding-top: var(--s6); }
+}
+
+/* ---- <= 1180px: drop the note track ------------------------------------- */
+@media screen and (max-width: 1180px) {
+  :root {
+    --rail: 11rem;
+    --tracks:
+      [rail-start] minmax(0, var(--rail))
+      [rail-end body-start] minmax(0, var(--body-w))
+      [body-end note-start note-end];
+  }
+
+  /* Note-rail blocks reflow beneath their body content as one mono line. */
+  .note {
+    grid-column: body;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0 var(--s3);
+    text-align: left;
+    margin-top: var(--s4);
+    padding-top: var(--s3);
+    border-top: 1px solid var(--rule);
+  }
+  .note span:not(:last-child)::after { content: ' ·'; }
+
+  .hero__spec { grid-row: 5; grid-column: body; margin-top: var(--s5); border-top: 0; padding-top: 0; }
+  .hero { grid-template-rows: repeat(8, auto); }
+  .ledger { grid-row: 6; }
+  .hero__spec-row { grid-row: 7; }
+  .hero__contact { grid-row: 8; }
+}
+
+/* ---- <= 860px: single column -------------------------------------------- */
+@media screen and (max-width: 860px) {
+  :root {
+    --tracks:
+      [rail-start rail-end body-start] minmax(0, 1fr) [body-end note-start note-end];
+  }
+
+  .running-head__nav { display: none; }
+  .running-head { justify-content: space-between; }
+  .theme__cell { width: 40px; height: 34px; }
+
+  .masthead, .contact__email, .hero__eyebrow, .hero__rule, .ledger,
+  .hero__spec-row, .hero__contact, .colophon, .index, .projects,
+  .employer, .role, .index-row, .section__head {
+    grid-column: 1 / -1;
+  }
+
+  /* Rail content becomes a horizontal eyebrow above its content. */
+  .section__numeral, .employer__span, .role__dates, .index-row__label {
+    grid-column: 1 / -1;
+    text-align: left;
+    justify-self: start;
+    transform: none;
+    position: static;
+    flex-direction: row;
+    gap: var(--s3);
+    padding-top: 0;
+    margin-bottom: var(--s3);
+  }
+  .section__head { padding-top: calc(3px + 5px + 1px + var(--s5)); }
+  .role__dates { padding-bottom: var(--s3); border-bottom: 1px solid var(--rule); }
+
+  /* In a 2x2 the outer edges are columns, not cells: :first-child/:last-child
+     would leave the bottom-left figure indented 16px from the top-left one. */
+  .ledger { grid-template-columns: repeat(2, 1fr); }
+  .ledger__cell:nth-child(odd)  { padding-inline: 0 var(--s4); }
+  .ledger__cell:nth-child(even) { padding-inline: var(--s4) 0; }
+
+  /* Stacked, both projects sit in the same column, so both lose the same
+     padding — otherwise the second sat 24px right of the first. */
+  .projects { grid-template-columns: 1fr; }
+  .project { padding-inline: 0; }
+
+  .leader-row { flex-wrap: wrap; }
+  /* `white-space: nowrap` keeps the value off the dot leader on wide screens,
+     but once the row wraps it becomes a hard 389px minimum width and is what
+     put a 419px floor under the whole page. */
+  .leader-row__value { width: 100%; text-align: left; white-space: normal; }
+  .leader { display: none; }
+}
+
+/* ---- <= 479px: the ledger stacks into baseline rows ---------------------- */
+@media screen and (max-width: 479px) {
+  :root { --gutter: 20px; }
+
+  /* A 2x2 at 375px gives 51px cells — a shrunken table pretending to be a
+     table. A stacked baseline row gives each figure the full column. */
+  .ledger { grid-template-columns: 1fr; }
+  .ledger__cell {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 0 var(--s4);
+    padding: var(--s4) 0 var(--s5);
+  }
+  .ledger dt { margin-bottom: 0; }
+  .ledger__caption { grid-column: 1 / -1; max-width: none; }
+
+  .hero__contact { gap: var(--s2) var(--s3); }
+
+  /* Better to drop the role than to truncate the name mid-word. */
+  .running-head__role { display: none; }
+}
+
+
+/* ==========================================================================
+   18  PRINT
+   --------------------------------------------------------------------------
+   The fourth breakpoint, and a real one. This prints as a typeset supplement
+   to resume.pdf, not a replacement for it — expect 2-3 A4 pages.
+
+   Never rely on a background: "background graphics" is off by default in most
+   print dialogs and print-color-adjust is honoured inconsistently. Both places
+   this design uses a background as structure are converted to real borders.
+   ========================================================================== */
+
+@page { size: A4; margin: 16mm 14mm; }
+
+@media print {
+  :root, :root[data-theme="dark"], :root[data-theme="light"] {
+    color-scheme: light;
+    --paper:       #fff;
+    --ink:         #000;     /* 21.00:1 */
+    --ink-2:       #333;     /* 12.63:1 */
+    --muted:       #4a4a4a;  /*  8.86:1 */
+    --edge:        #767676;  /*  4.54:1 */
+    --rule:        #767676;  /*  4.54:1 */
+    --rule-strong: #000;
+    --accent:      #8c2018;  /*  8.99:1 — darkened so it survives a greyscale laser */
+    --gutter: 0;
+  }
+
+  .running-head, .theme, .skip, .sprite { display: none !important; }
+  .reveal, .js .reveal { opacity: 1 !important; transform: none !important; }
+  .hero__rule, .ledger__cell::before { transform: none !important; animation: none !important; }
+
+  /* No transitions on paper. The theme-colour transition on <body> meant a
+     print snapshot taken early could capture a half-transitioned background. */
+  *, *::before, *::after { transition: none !important; }
+
+  /* The bullet marker was a 14x1px BACKGROUND, so with "background graphics"
+     off — the default in most print dialogs — every highlight in the document
+     lost its marker. A border always prints. */
+  .role__highlights li::before {
+    background: none;
+    border-top: 1px solid var(--rule-strong);
+    height: 0;
+  }
+
+  /* A printed page separated from its footer is useless without this. */
+  .print-head {
+    display: block !important;
+    font: 500 8pt/1.4 var(--mono);
+    letter-spacing: .06em;
+    color: var(--ink);
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 6pt;
+    margin-bottom: 10pt;
+  }
+
+  .sheet { display: block; }
+  .hero, .section, .section__head, .role, .index-row, .employer, .projects {
+    display: block;
+    padding-inline: 0;
+  }
+  .hero { padding-top: 0; padding-bottom: 9pt; }
+  .section { padding-block: 9pt; }
+  .section__head { margin-bottom: 8pt; }
+  .role__dates { position: static; }
+  .note { display: block; font-size: 8pt; border: 0; margin-top: 4pt; }
+  .role--client { margin-inline-start: 8pt; }
+
+  body { font-size: 10pt; line-height: 1.45; }
+  .masthead { font-size: 30pt; line-height: .92; margin-bottom: 8pt; }
+  .deck { font-size: 13pt; max-width: none; }
+  .section__title { font-size: 14pt; }
+  .employer__name, .role__title, .project__name { font-size: 11pt; }
+  /* Without this the 64px ledger numerals overflow the A4 measure. */
+  .fig { font-size: inherit; }
+  .fig-lg { font-size: 20pt; }
+
+  /* Gap-rules are backgrounds and backgrounds do not print. */
+  .ledger, .projects { background: none; gap: 0; }
+  .ledger { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .ledger__cell { border-left: 1px solid var(--rule); border-top: 1px solid var(--rule); padding: 6pt; }
+  .ledger__cell:first-child { border-left: 0; padding-left: 0; }
+  .project + .project { border-top: 1px solid var(--rule); padding-top: 8pt; margin-top: 8pt; }
+  .leader {
+    background: none;
+    border-bottom: 1px dotted var(--rule);
+    height: 0;
+    margin-bottom: .34em;
+  }
+  /* The strips carry nothing the printed numeral does not, and gradient ticks
+     are exactly what a background-off printer drops. */
+  .readout { display: none; }
+
+  .role, .project, .index-row, .ledger__cell { break-inside: avoid; }
+  .role { padding-block: 6pt; }
+  .index-row { padding-block: 4pt; }
+  .employer { padding-top: 6pt; }
+  .prose p + p { margin-top: 6pt; }
+  .role__highlights li + li { margin-top: 3pt; }
+  .section__head, .section__title { break-after: avoid; }
+  .employer { break-inside: auto; }
+  p, li { orphans: 2; widows: 2; }
+
+  a { background-image: none; }
+  /* URLs are printed only where the URL is the point — a credential to verify
+     or a project to look up. Expanding every prose link to a company homepage
+     added roughly a page of noise for links nobody would ever type. */
+  .leader-row[href^="http"]::after,
+  .project__name a[href^="http"]::after {
+    content: ' ' attr(href);
+    font: 500 7.5pt/1 var(--mono);
+    color: var(--ink-2);
+    word-break: break-all;
+  }
+}

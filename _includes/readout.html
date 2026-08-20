@@ -1,0 +1,48 @@
+{%- comment -%}
+  A small hand-drawn instrument for a project result. Two kinds:
+
+    scale  a segmented strip — how much of a known range the score fills
+    delta  two bars — before against after, on a known maximum
+
+  GOVERNING RULE: no readout without two real values and a title naming them.
+  Both kinds take their numbers straight from projects.yml. A decorative bar on
+  an unmeasured result would be fabricated telemetry, which for someone whose
+  positioning is "I keep systems honest" is the worst available failure. This is
+  why the four hero metrics have no readout: we know the response-quality gain
+  was 26% but not the baseline it moved from, "30K+ chats" has no denominator,
+  and "7 tenants" has no cap.
+
+  REDUNDANT CUES: --accent against --rule measures only 1.26:1 in light and
+  1.59:1 in dark, so fill is never signalled by colour alone. The lit layer is
+  14px tall against a 6px track, and the delta bars differ by
+  outline-versus-solid as well as by width. The comparison survives greyscale.
+{%- endcomment -%}
+
+{%- assign r = include.readout -%}
+
+{%- if r.kind == 'scale' -%}
+  {%- assign pct = r.value | times: 100.0 | divided_by: r.max -%}
+<div class="readout readout--scale">
+  <div class="readout__strip" role="img" aria-label="{{ r.title }}">
+    <span class="readout__track" aria-hidden="true"></span>
+    <span class="readout__fill" style="width: {{ pct }}%" aria-hidden="true"></span>
+  </div>
+  <p class="readout__ends meta" aria-hidden="true">
+    <span>0</span><span>{{ r.max }}.0000</span>
+  </p>
+</div>
+
+{%- elsif r.kind == 'delta' -%}
+  {%- assign pb = r.before | times: 100.0 | divided_by: r.max -%}
+  {%- assign pa = r.after  | times: 100.0 | divided_by: r.max -%}
+<div class="readout readout--delta">
+  <div class="readout__bars" role="img" aria-label="{{ r.title }}">
+    <span class="readout__bar readout__bar--before" style="width: {{ pb }}%" aria-hidden="true"></span>
+    <span class="readout__bar readout__bar--after" style="width: {{ pa }}%" aria-hidden="true"></span>
+  </div>
+  <p class="readout__ends meta" aria-hidden="true">
+    <span>Before {{ r.before }}</span>
+    <span>After {{ r.after }} · <span class="readout__delta">{{ r.delta }}</span></span>
+  </p>
+</div>
+{%- endif -%}
