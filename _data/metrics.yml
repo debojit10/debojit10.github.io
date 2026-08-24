@@ -1,0 +1,22 @@
+# Headline numbers shown under the hero. Keep this to four — it is a summary,
+# not an inventory. Every one of these is evidenced in the experience section.
+
+- value: '26'
+  unit: '%'
+  label: response-quality gain
+  detail: from an LLM-as-judge evaluation pipeline across our production AI services
+
+- value: '60'
+  unit: '%'
+  label: inference cost cut
+  detail: fine-tuned and self-hosted open models replacing GPT-4o in production
+
+- value: '30'
+  unit: K+
+  label: chats analysed
+  detail: objective and subjective analytics feeding the admin dashboard
+
+- value: '7'
+  unit: ''
+  label: tenants in production
+  detail: served by one centralized, versioned prompt system

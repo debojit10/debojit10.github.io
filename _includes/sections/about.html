@@ -1,0 +1,46 @@
+{%- comment -%}
+  01 — About. The only prose section on the page, and the one section whose
+  right note rail is deliberately empty. The channel is populated seven times
+  elsewhere; one column of air is what stops it reading as a sidebar.
+
+  Every metric in the copy is wrapped in .fig — the red-pen underline. A reader
+  can hop underline to underline and collect the quantified outcomes in about
+  six seconds, which is the budget this page is built for.
+{%- endcomment -%}
+<section class="section reveal" id="about" aria-labelledby="about-title">
+  <div class="section__head">
+    <span class="section__numeral" aria-hidden="true">01</span>
+    <h2 class="section__title" id="about-title">About</h2>
+  </div>
+
+  <div class="section__body prose">
+    <p>
+      I'm an ML Engineer at <a href="https://rivi.co/" rel="noopener" target="_blank">Rivi</a>, where I own the LLM
+      layer behind our AI products — agent prompts, retrieval, and the evaluation and observability that tell us when
+      any of it drifts. Most of what I build is the unglamorous half: a versioned prompt system serving
+      <span class="fig">7 tenants</span> across <span class="fig">2 channels</span> and
+      <span class="fig">3 environments</span>, a RAG microservice that keeps answers grounded, and per-tenant cost
+      tracing on Langfuse and Braintrust.
+    </p>
+
+    <p>
+      The work I care most about is measurement. An LLM-as-judge evaluation pipeline I built baselined our AI services
+      and pinpointed their failure modes, which moved response quality <span class="fig">26%</span>. Once there was a
+      number to defend, replacing GPT-4o with fine-tuned, self-hosted Mistral-7B and Llama-2-13B became a decision
+      rather than a gamble — and cut inference cost <span class="fig">60%</span>.
+    </p>
+
+    <p>
+      Earlier I worked on NLP and large-scale data at
+      <a href="https://shortlyst.ai/" rel="noopener" target="_blank">Shortlyst AI</a>, where I indexed
+      <span class="fig">30M+</span> profiles and fine-tuned DistilBERT to fill in what the data was missing, and at
+      <a href="https://locobuzz.com/" rel="noopener" target="_blank">Locobuzz</a> on social-listening analytics. I hold
+      a Diploma in Data Science from
+      <a href="https://study.iitm.ac.in/ds/" rel="noopener" target="_blank">IIT Madras</a>.
+    </p>
+
+    <p class="prose__aside">
+      Away from a screen I'm usually with my cats, in the gym, or playing soccer.
+    </p>
+  </div>
+</section>

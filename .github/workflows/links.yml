@@ -1,0 +1,41 @@
+# External links rot on their own schedule, so they are checked on one — never
+# on a push, where a rate-limited third party would fail an unrelated commit.
+name: external links
+
+on:
+  schedule:
+    - cron: '0 6 1 * *'   # 06:00 UTC on the 1st of each month
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  external:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+
+      - run: bundle exec jekyll build
+        env:
+          JEKYLL_ENV: production
+
+      # See ci.yml for why --swap-urls needs the escaped colon and why the HTTPS
+      # check is negated with --no-enforce-https rather than a value.
+      #
+      # 403/429/999 are ignored because LinkedIn, Coursera and Kaggle all answer
+      # bot traffic that way; a real dead link still returns 404 or fails to
+      # resolve. This job is here to catch rot, not to police rate limiting.
+      - name: Check outbound links
+        run: |
+          gem install html-proofer --no-document
+          htmlproofer ./_site \
+            --no-enforce-https \
+            --checks Links \
+            --ignore-status-codes '403,429,999' \
+            --swap-urls '^https\://debojit10\.github\.io:'

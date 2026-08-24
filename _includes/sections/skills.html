@@ -1,0 +1,28 @@
+{%- comment -%}
+  04 — Skills, set as a back-of-book index.
+
+  Forty-five tags as forty-five pills is the single most template-looking thing
+  a portfolio can do. An index has no boxes, no borders, no fills and no hover
+  states, reads top to bottom in about three seconds, and carries its counts by
+  convention — which happens to tell a skimmer the depth distribution for free.
+
+  The " · " separator is the SOLE delimiter between inline items here, so it is
+  load-bearing text and takes --muted (7.27:1), never a hairline colour.
+{%- endcomment -%}
+<section class="section reveal" id="skills" aria-labelledby="skills-title">
+  <div class="section__head">
+    <span class="section__numeral" aria-hidden="true">04</span>
+    <h2 class="section__title" id="skills-title">Skills</h2>
+  </div>
+
+  <div class="index">
+    {%- for cat in site.data.skills %}
+    <div class="index-row">
+      <h3 class="index-row__label meta">{{ cat.category }} · {{ cat.items | size }}</h3>
+      <ul class="index-row__items">
+        {%- for item in cat.items %}<li>{{ item | escape }}</li>{% endfor %}
+      </ul>
+    </div>
+    {%- endfor %}
+  </div>
+</section>

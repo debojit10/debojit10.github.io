@@ -1,39 +1,102 @@
-# Site settings
+# ---------------------------------------------------------------------------
+# Site configuration — debojit10.github.io
+#
+# Built and served by GitHub Pages' own Jekyll. There is deliberately no
+# node/gulp/Sass toolchain: templates are Liquid, styles are hand-written CSS
+# with custom properties, and behaviour is one dependency-free JS file. Edit
+# content in _data/*.yml and push; GitHub Pages rebuilds on its own.
+# ---------------------------------------------------------------------------
+
+# --- Identity ---------------------------------------------------------------
 name: Debojit Nath
-title: Debojit Nath | ML Engineer
-description: Design-minded front-end software engineer focused on building beautiful interfaces and experiences
-url: https://debojit10.github.io/
+role: ML Engineer
+title: Debojit Nath — ML Engineer
+tagline: >-
+  I build LLM agents, RAG systems, and the evaluation pipelines that keep them
+  honest in production.
+description: >-
+  ML Engineer working on LLM agents, retrieval and multi-tenant AI systems —
+  and on the evaluation, tracing and cost tooling that keeps them measurable in
+  production.
+location: India
+locale: en_IN
+lang: en
+
+# --- URLs -------------------------------------------------------------------
+url: https://debojit10.github.io
 baseurl: ''
-email: brittany.chiang@gmail.com
-cover: https://debojit10.github.io/img/og.png
-logo: https://debojit10.github.io/img/emojis/technologist.png
-resume: https://debojit10.github.io/resume.pdf
+email: nathdebojit2000@gmail.com
+resume: /resume.pdf
+resume_filename: Debojit-Nath-Resume.pdf
+
+# --- Open Graph / social cards ---------------------------------------------
+image: /assets/img/og.png
+image_alt: >-
+  Debojit Nath — ML Engineer building LLM agents, RAG systems and the
+  evaluation pipelines that keep them honest in production.
+
+# --- Profiles ---------------------------------------------------------------
+# `icon` must match an <symbol id="i-…"> in _includes/icons.html
 social:
-  - title: email
-    url: mailto:nathdebojit2000@gmail.com
-  - title: github
+  - name: GitHub
+    icon: github
     url: https://github.com/debojit10
-  - title: linkedin
+    handle: debojit10
+  - name: LinkedIn
+    icon: linkedin
     url: https://www.linkedin.com/in/debojit-nath/
+    handle: debojit-nath
+  - name: Kaggle
+    icon: kaggle
+    url: https://www.kaggle.com/denojitnath
+    handle: denojitnath
+  - name: Email
+    icon: mail
+    url: mailto:nathdebojit2000@gmail.com
+    handle: nathdebojit2000@gmail.com
 
-# Build settings
+# --- In-page navigation -----------------------------------------------------
+# `id` must match the section element id in index.html
+nav:
+  - id: about
+    label: About
+  - id: experience
+    label: Experience
+  - id: projects
+    label: Projects
+  - id: skills
+    label: Skills
+  - id: education
+    label: Education
+  - id: contact
+    label: Contact
+
+# --- Build ------------------------------------------------------------------
 markdown: kramdown
+encoding: utf-8
+timezone: Asia/Kolkata
+future: true
 
+# No plugins. Everything GitHub Pages would give us via jekyll-seo-tag and
+# jekyll-sitemap is hand-written in _includes/head.html and sitemap.xml, which
+# keeps the build identical locally and on Pages.
+plugins: []
+
+# GitHub Pages force-enables jekyll-readme-index and
+# jekyll-optional-front-matter, which would turn assets/fonts/README.md into
+# that directory's index page. It is developer notes, so it stays out.
 exclude:
-  - 'Gemfile'
-  - 'Gemfile.lock'
-  - '*.gemspec'
-  - 'README.md'
-  - 'node_modules'
-  - 'build'
-  - 'gulpfile.js'
-  - 'package.json'
+  - assets/fonts/README.md
+  - Gemfile
+  - tools
+  - Gemfile.lock
+  - README.md
+  - LICENSE
+  - node_modules
+  - vendor
+  - .github
+  - .editorconfig
 
 keep_files:
-  - 'CNAME'
-  - '.git'
-  - '.gitignore'
-
-plugins_dir:
-  - jekyll-minifier
-  - jekyll-sitemap
+  - .git
+  - CNAME

@@ -1,0 +1,17 @@
+# Verified coursework and certifications. Rendered by _includes/sections/education.html
+
+- name: Deep Learning Specialization
+  issuer: DeepLearning.AI
+  url: https://coursera.org/share/e0209bfd5276fd9ef2bc9c9d1f7a5f54
+
+- name: Machine Learning
+  issuer: Stanford University
+  url: https://www.coursera.org/account/accomplishments/verify/M8UC72A9JYF7
+
+- name: 'Mathematics for Machine Learning: Linear Algebra'
+  issuer: Imperial College London
+  url: https://coursera.org/share/3fe89aa181a01914d8298c2130ea030a
+
+- name: Fundamentals of Reinforcement Learning
+  issuer: University of Alberta
+  url: https://coursera.org/share/f30e20bd0b8d0e2155ac51e088e9ae85

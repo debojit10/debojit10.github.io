@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" shape-rendering="crispEdges">
+  <!-- The masthead reduced to three marks: the Scotch double rule with the
+       proofreader's red rule beneath it. "DN" is illegible at 16px and every
+       portfolio uses it anyway. The 4 / 1.5 / 4 weights are chosen so a 16px
+       render lands on 2 / 1 / 2 device pixels instead of one grey smear. -->
+  <style>
+    :root { --f: #16130F; --a: #B4302A; }
+    @media (prefers-color-scheme: dark) { :root { --f: #F3EDE3; --a: #FF7A5C; } }
+  </style>
+  <rect x="3" y="7"    width="26" height="4"   fill="var(--f)"/>
+  <rect x="3" y="13.5" width="26" height="1.5" fill="var(--f)"/>
+  <rect x="3" y="21"   width="26" height="4"   fill="var(--a)"/>
+</svg>
