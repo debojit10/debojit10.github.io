@@ -16,7 +16,7 @@
     - Drove a <strong>26% gain in response quality</strong> with an LLM-as-judge evaluation pipeline that baselined our AI services and pinpointed their failure modes
     - Authored and shipped agent prompts through a centralized, versioned prompt system serving <strong>7 tenants, 2 channels and 3 environments</strong>
     - Cut inference cost <strong>60%</strong> by fine-tuning and self-hosting Mistral-7B and Llama-2-13B to replace GPT-4o in production
-    - Generated objective and subjective analytics from <strong>30,000+ chats</strong> for the admin dashboard, cutting manual analysis effort
+    - Generated objective and subjective analytics from <strong>30,000+ chats</strong> for the admin dashboard, creating actionable business insights
     - Built end-to-end monitoring of AI agents on Langfuse and Braintrust, enabling per-tenant cost tracking and cutting debugging time
     - Developed a RAG microservice that supplies the LLM service with grounded context, improving answer relevance
   stack:
@@ -74,10 +74,10 @@
     Social-listening analytics — turning noisy public text into signals the
     business could act on.
   highlights:
-    - Predicted stock price movement from tweets at <strong>86% accuracy</strong>
+    - Forecast next-day price direction for 5 tickers at <strong>86% accuracy</strong>, classifying 20K tweets with Twitter-roBERTa-base and combining daily sentiment with historical OHLCV features
     - Cut sales-report turnaround from <strong>3 hours to under 10 minutes</strong> by cleaning and structuring raw records into analysis-ready tables
   stack:
-    - Python
+    - Twitter-roBERTa
     - NLP
     - pandas
     - SQL
