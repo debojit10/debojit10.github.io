@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Dot & Key Meta Ads performance dashboard — spend, ROAS, CTR and CPA for a non-technical category team." />
+  <title>Dot &amp; Key · Ads Performance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">✦</div>
+        <div>
+          <div class="eyebrow">Dot &amp; Key · Media Intelligence</div>
+          <h1>Ads Performance <span>Dashboard</span></h1>
+          <p class="meta" id="header-meta">Loading…</p>
+        </div>
+      </div>
+      <div class="hero-roas">
+        <div class="eyebrow">Overall ROAS</div>
+        <div class="hero-number" id="hero-roas">—</div>
+        <div class="hero-sub" id="hero-sub">revenue ÷ spend</div>
+      </div>
+    </header>
+
+    <section class="filterbar" aria-label="Dashboard filters">
+      <div class="filter">
+        <label for="date-start">From</label>
+        <input type="date" id="date-start" />
+      </div>
+      <div class="filter">
+        <label for="date-end">To</label>
+        <input type="date" id="date-end" />
+      </div>
+      <div class="filter">
+        <label for="objective">Objective</label>
+        <select id="objective">
+          <option value="all">All objectives</option>
+          <option value="Conversions">Conversions</option>
+          <option value="Awareness">Awareness</option>
+        </select>
+      </div>
+      <details class="camp-filter" id="camp-filter">
+        <summary><span>Campaigns</span><span class="count" id="camp-count">6 of 6</span></summary>
+        <div class="camp-menu" id="camp-menu"></div>
+      </details>
+      <button class="reset" id="reset" type="button">Reset</button>
+      <div class="freshness" id="freshness">Data as of —</div>
+    </section>
+
+    <section class="kpis" id="kpis" aria-label="Headline metrics"></section>
+
+    <nav class="tabs" role="tablist" aria-label="Dashboard sections">
+      <button class="tab active" data-tab="overview" role="tab" aria-selected="true">📈 Overview</button>
+      <button class="tab" data-tab="campaigns" role="tab" aria-selected="false">🏆 Campaigns</button>
+      <button class="tab" data-tab="audience" role="tab" aria-selected="false">👥 Audience &amp; budget</button>
+      <button class="tab" data-tab="decisions" role="tab" aria-selected="false">✅ Decisions &amp; flags</button>
+      <button class="tab" data-tab="data" role="tab" aria-selected="false">📋 Data</button>
+    </nav>
+
+    <main>
+      <!-- OVERVIEW -->
+      <section class="tab-panel active" id="tab-overview" role="tabpanel">
+        <div class="decision-strip" id="decision-strip"></div>
+
+        <div class="grid">
+          <article class="card wide">
+            <div class="card-head">
+              <div>
+                <h2>Weekly spend, revenue and ROAS</h2>
+                <p>The one chart to open first: is growth paid for efficiently?</p>
+              </div>
+            </div>
+            <div class="plot tall" id="ch-weekly"></div>
+          </article>
+
+          <article class="card">
+            <div class="card-head"><div><h2>ROAS trend</h2><p>Revenue per ₹1 of spend, by week.</p></div></div>
+            <div class="plot" id="ch-roas-trend"></div>
+          </article>
+          <article class="card">
+            <div class="card-head"><div><h2>CTR trend</h2><p>Clicks ÷ impressions, by week.</p></div></div>
+            <div class="plot" id="ch-ctr-trend"></div>
+          </article>
+          <article class="card">
+            <div class="card-head"><div><h2>CPA trend</h2><p>Spend per purchase, by week.</p></div></div>
+            <div class="plot" id="ch-cpa-trend"></div>
+          </article>
+
+          <article class="card wide">
+            <div class="card-head">
+              <div><h2>Daily spend and revenue</h2><p>Use this to spot one-off outages or tracking gaps.</p></div>
+            </div>
+            <div class="plot" id="ch-daily"></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- CAMPAIGNS -->
+      <section class="tab-panel" id="tab-campaigns" role="tabpanel">
+        <div class="grid">
+          <article class="card wide">
+            <div class="card-head"><div><h2>Spend vs revenue by campaign</h2><p>Who is buying growth and who is renting it?</p></div></div>
+            <div class="plot tall" id="ch-camp-spend"></div>
+          </article>
+          <article class="card">
+            <div class="card-head"><div><h2>ROAS by campaign</h2><p>Dashed line = ~1.43 breakeven at 70% gross margin.</p></div></div>
+            <div class="plot" id="ch-camp-roas"></div>
+          </article>
+          <article class="card">
+            <div class="card-head"><div><h2>CTR by campaign</h2><p>Which creative/audience is earning attention?</p></div></div>
+            <div class="plot" id="ch-camp-ctr"></div>
+          </article>
+          <article class="card">
+            <div class="card-head"><div><h2>CPA by campaign</h2><p>Cost per purchase; lower is better.</p></div></div>
+            <div class="plot" id="ch-camp-cpa"></div>
+          </article>
+          <article class="card">
+            <div class="card-head"><div><h2>Spend share</h2><p>Where the budget goes.</p></div></div>
+            <div class="plot" id="ch-spend-donut"></div>
+          </article>
+          <article class="card">
+            <div class="card-head"><div><h2>Revenue share</h2><p>Where the money comes back.</p></div></div>
+            <div class="plot" id="ch-rev-donut"></div>
+          </article>
+          <article class="card wide">
+            <div class="card-head"><div><h2>Attention vs conversion</h2><p>CTR vs CVR; bubble size = spend. Top-right is the sweet spot.</p></div></div>
+            <div class="plot tall" id="ch-bubble"></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- AUDIENCE -->
+      <section class="tab-panel" id="tab-audience" role="tabpanel">
+        <div class="grid">
+          <article class="card">
+            <div class="card-head"><div><h2>Awareness vs conversion</h2><p>Spend and revenue split by objective.</p></div></div>
+            <div class="plot" id="ch-objective"></div>
+          </article>
+          <article class="card">
+            <div class="card-head"><div><h2>Retargeting: capped vs uncapped</h2><p>When spend pins at ₹9,500/day, is revenue actually missing?</p></div></div>
+            <div class="plot" id="ch-capped"></div>
+          </article>
+          <article class="card wide">
+            <div class="card-head"><div><h2>Weekly ROAS heatmap</h2><p>Dark = weak week. Look for rows that move together.</p></div></div>
+            <div class="plot tall" id="ch-heatmap"></div>
+          </article>
+          <article class="card wide">
+            <div class="card-head"><div><h2>Retargeting daily spend</h2><p>Orange dots are capped days. The cap binds often, not randomly.</p></div></div>
+            <div class="plot" id="ch-retarget-daily"></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- DECISIONS -->
+      <section class="tab-panel" id="tab-decisions" role="tabpanel">
+        <div class="section-intro">
+          <h2>Three decisions the data supports</h2>
+          <p>Written for a Category Head, not an analyst. ₹ figures are monthly unless stated. Full-period totals: <strong>₹1.75Cr spend, ₹2.33Cr revenue, 1.33 ROAS</strong> (30 Mar–27 Jun 2026).</p>
+        </div>
+        <div class="decision-grid" id="decision-grid"></div>
+
+        <div class="section-intro flags-intro">
+          <h2>Data flags — what is not clean</h2>
+          <p>These are the three things I would tell the team before they trust a number.</p>
+        </div>
+        <div class="flag-grid" id="flag-grid"></div>
+
+        <div class="method">
+          <h2>How to read this dashboard</h2>
+          <ul>
+            <li><strong>Contribution</strong> = revenue − media spend. It is not gross profit; COGS, fulfilment and marketplace fees are not in this dataset.</li>
+            <li><strong>ROAS</strong> = attributed revenue ÷ spend. <strong>CPA</strong> = spend ÷ purchases. <strong>CTR</strong> = clicks ÷ impressions. <strong>CVR</strong> = purchases ÷ clicks.</li>
+            <li>Campaign/ad-set names are not unique across campaigns. This dashboard keys on <code>campaign + adset + date</code>; never aggregate on <code>adset</code> alone.</li>
+            <li>Date range, campaign and objective filters drive every chart, KPI and the downloadable CSV.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- DATA -->
+      <section class="tab-panel" id="tab-data" role="tabpanel">
+        <div class="section-intro">
+          <h2>Filtered data</h2>
+          <p id="data-summary">—</p>
+        </div>
+        <div class="table-wrap"><table id="data-table"><thead></thead><tbody></tbody></table></div>
+        <div class="data-actions">
+          <button class="primary" id="download" type="button">Download filtered CSV</button>
+          <span class="hint">1,260 ad-set/day rows · 30 Mar–27 Jun 2026 · synthetic dataset</span>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Dot &amp; Key · AI Generalist assignment · Part 2</span>
+      <span>Source: <code>ads_performance_ready.csv</code> · built for a daily open, not a weekly deck</span>
+    </footer>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
