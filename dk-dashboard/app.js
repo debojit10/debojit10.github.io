@@ -274,10 +274,10 @@
       cls: "scale",
       title: "Raise the retargeting cap",
       short: "₹4.14 return per ₹1 — 3.1× the account average — but the cap binds.",
-      metric: "+₹11.2L/mo",
-      metricSub: "revenue on +₹2.7L spend at 4.14 ROAS",
+      metric: "₹1–5L/mo",
+      metricSub: "proven capped-day headroom; ₹11.2L is the linear ceiling",
       body:
-        "Retargeting returns ₹4.14 for every ₹1 spent — 3.1× the 1.33 account average — but spend pins at exactly ₹9,500/day on 75 of 180 ad-set days (42%). That is a budget ceiling, not missing data. Raise the combined daily cap ~50% (₹19k → ₹28k) and review weekly; walk it back if ROAS drops below 3.0. Worth: +₹2.7L/month spend at 4.14 ROAS ≈ +₹11.2L/month revenue.",
+        "Retargeting returns ₹4.14 for every ₹1 spent — 3.1× the 1.33 account average — but spend pins at exactly ₹9,500/day on 75 of 180 ad-set days (42%). That is a budget ceiling, not missing data. Raise the combined daily cap ~50% (₹19k → ₹28k) and review weekly; walk it back if ROAS drops below 3.0. The honest number: filling only the days the cap actually binds is ~₹1–2L/month extra spend and ~₹1–5L/month revenue. The +₹11.2L linear extrapolation is a ceiling, not a forecast — run it as a test with a pre-registered walk-back.",
     },
     {
       tag: "Refresh",
@@ -287,7 +287,7 @@
       metric: "+₹4.4L/mo",
       metricSub: "revenue by restoring the 1.39 average ROAS",
       body:
-        "Tinted SPF ROAS fell 1.73 → 1.10 and CTR 1.53% → 1.16% from April to June while spend held at ₹15–18L/month. Same money, ~36% less return — the signature of creative fatigue on a launch campaign. Refresh 2–3 hero creatives (new hooks/formats), not a full relaunch. Worth: restoring only the 13-week average ROAS of 1.39 on ₹15.2L/month adds ~₹4.4L/month revenue.",
+        "Tinted SPF ROAS fell 1.73 → 1.10 and CTR 1.53% → 1.16% from April to June while spend held at ₹15–18L/month. CVR stayed ~3.4–3.6% and AOV was flat, so this is a top-of-funnel attention problem, not a landing-page problem. Same money, ~36% less return — the signature of creative fatigue on a launch campaign. Refresh 2–3 hero creatives (new hooks/formats), not a full relaunch. Worth: restoring only the 13-week average ROAS of 1.39 on ₹15.2L/month adds ~₹4.4L/month revenue.",
     },
     {
       tag: "Cut / re-measure",
@@ -297,7 +297,7 @@
       metric: "+₹5.4L/mo",
       metricSub: "revenue by moving half to conversion at 1.33 ROAS",
       body:
-        "Watermelon Awareness spends ₹8.8L/month (15.1% of the whole budget) and returns ₹0.11 per ₹1 — 1.2% of revenue. It is funded like a performance campaign and judged like one, which suits neither. Either move half (~₹4.4L/month) to conversion, or — if it is a deliberate brand play — stop grading it on ROAS and track reach/CPM instead. Worth: half reallocated at the 1.33 blended ROAS adds ~₹5.4L/month revenue versus ₹0.11 today. Fast follow: Barrier Repair (ROAS 1.03) is below the ~1.43 breakeven.",
+        "Watermelon Awareness spends ₹8.8L/month (15.1% of the whole budget) and returns ₹0.11 per ₹1 — 1.2% of revenue. It is funded like a performance campaign and judged like one, which suits neither. The week-22 natural experiment already made the case: spend rose ~₹2.35L vs the W19/W21 average, ~₹2.49L of it went to Watermelon, and revenue fell ~₹33k (incremental ROAS -0.14 overall, 0.13 on Watermelon). Either move half (~₹4.4L/month) to conversion, or — if it is a deliberate brand play — stop grading it on ROAS and track reach/CPM. Worth: half reallocated at the 1.33 blended ROAS adds ~₹5.4L/month revenue versus ₹0.11 today. Fast follow: Barrier Repair (ROAS 1.03) is below the ~1.43 breakeven.",
     },
   ];
 
@@ -319,6 +319,12 @@
       body:
         "Every campaign dropped 20–35% in the same week — Tinted 1.48→1.02, Vit-C 1.24→0.95, Barrier 1.01→0.79, Retargeting 4.52→2.91, Lip Balm 1.14→0.90 — then mostly recovered. Unrelated campaigns falling together points to a pixel/tracking outage or site issue. Treat week-20 numbers as untrusted before acting.",
       proof: "Account ROAS 1.41 → 1.01 · week of 11 May",
+    },
+    {
+      title: "Partial periods distort the edges",
+      body:
+        "March is only two days (30–31 Mar), June is 27 days, and week 26 is six days (22–27 Jun). The first and last points on a monthly/weekly line are calendar artifacts, not a launch spike or a collapse. Default the daily view to the last 30 complete days and label partial periods before reading a trend.",
+      proof: "Mar = 2 days · W26 = 6 days",
     },
   ];
 
