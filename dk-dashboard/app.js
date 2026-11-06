@@ -595,7 +595,7 @@
         annotations: [
           {
             text: ret.length
-              ? `${capped.length} of ${ret.length} retargeting ad-set days are capped · spend ₹${fmtINR(cm.spend)} vs ₹${fmtINR(um.spend)}`
+              ? `${capped.length} of ${ret.length} retargeting ad-set days are capped · spend ${fmtINR(cm.spend)} vs ${fmtINR(um.spend)}`
               : "Retargeting not in the current filter",
             showarrow: false,
             x: 0.5,
