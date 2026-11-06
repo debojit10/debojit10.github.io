@@ -59,11 +59,12 @@
 
   function fmtINR(n) {
     if (!Number.isFinite(n)) return "—";
+    const sign = n < 0 ? "-" : "";
     const abs = Math.abs(n);
-    if (abs >= 1e7) return `₹${(n / 1e7).toFixed(2)}Cr`;
-    if (abs >= 1e5) return `₹${(n / 1e5).toFixed(1)}L`;
-    if (abs >= 1e3) return `₹${(n / 1e3).toFixed(1)}K`;
-    return `₹${Math.round(n)}`;
+    if (abs >= 1e7) return `${sign}₹${(abs / 1e7).toFixed(2)}Cr`;
+    if (abs >= 1e5) return `${sign}₹${(abs / 1e5).toFixed(1)}L`;
+    if (abs >= 1e3) return `${sign}₹${(abs / 1e3).toFixed(1)}K`;
+    return `${sign}₹${Math.round(abs)}`;
   }
 
   function fmtPct(n) {
@@ -589,6 +590,7 @@
       ],
       L({
         showlegend: false,
+        margin: { l: 56, r: 16, t: 36, b: 38 },
         yaxis: { ticksuffix: "x", range: [0, Math.max(cm.roas, um.roas, 1) * 1.28] },
         annotations: [
           {
@@ -597,7 +599,7 @@
               : "Retargeting not in the current filter",
             showarrow: false,
             x: 0.5,
-            y: 1.12,
+            y: 1.06,
             xref: "paper",
             yref: "paper",
             font: { size: 9, color: COLORS.muted },
