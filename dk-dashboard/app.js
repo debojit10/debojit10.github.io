@@ -396,6 +396,28 @@
       })
     );
 
+    const campKeys = [...state.camps].sort((a, b) => a - b);
+    draw(
+      "ch-weekly-spend-camp",
+      campKeys.map((c) =>
+        barTrace(
+          labels,
+          weekly.map((w) => {
+            const rs = w.rows.filter((r) => r.c === c);
+            return rs.length ? agg(rs).spend : 0;
+          }),
+          campaignName(c),
+          campaignColor(c),
+          { hovertemplate: `${campaignName(c)}: ₹%{y:,.0f}<extra></extra>` }
+        )
+      ),
+      L({
+        barmode: "stack",
+        hovermode: "x unified",
+        yaxis: { tickformat: "~s", title: { text: "₹", font: { size: 9 } } },
+      })
+    );
+
     const trend = (id, values, color, hover, tickformat, extra = {}) =>
       draw(
         id,
